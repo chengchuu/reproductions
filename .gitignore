@@ -1,0 +1,6 @@
+**/node_modules/
+**/dist/
+**/.cache/
+**/vendor/babel-plugin-react-compiler-rust/native/
+**/vendor/babel-plugin-react-compiler-rust/LICENSE
+.DS_Store

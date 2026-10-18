@@ -1,0 +1,31 @@
+{
+  "name": "react-rust-compiler-unicode-repro",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "setup": "node scripts/setup.mjs"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@rolldown/plugin-babel": "0.2.4",
+    "@types/babel__core": "7.1.19",
+    "@types/node": "^22.20.5",
+    "@vitejs/plugin-react": "6.1.2",
+    "babel-plugin-react-compiler-rust": "link:vendor/babel-plugin-react-compiler-rust",
+    "rolldown": "1.2.14",
+    "typescript": "5.4.3",
+    "vite": "8.3.4"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "packageManager": "yarn@1.22.22"
+}
