@@ -4,10 +4,7 @@ A minimal React + Vite project using the experimental Rust React Compiler throug
 
 ## Requirements
 
-- Node.js 20.19+ on the 20.x line, or Node.js 22.12+.
-- Yarn Classic 1.22.22, Git, and a current stable Rust toolchain with Cargo on `PATH`.
-- Native build tools (Xcode Command Line Tools on macOS).
-- Network access to download JavaScript dependencies, React source, and Rust crates.
+Node.js, Yarn Classic, Git, Rust/Cargo, and native build tools.
 
 ## Get started
 
@@ -21,7 +18,7 @@ yarn dev
 
 Open the local URL printed by Vite.
 
-The current sample in `src/App.jsx` mutates props, so it triggers a compiler error during development and prevents a successful production build.
+The current sample in `src/main.jsx` mutates props, so it triggers a compiler error during development and prevents a successful production build.
 
 ## Available scripts
 
@@ -36,6 +33,4 @@ The current sample in `src/App.jsx` mutates props, so it triggers a compiler err
 
 The script downloads source into `.cache/` and builds the local plugin in `vendor/`. No existing React checkout is required. Run setup after installing dependencies and whenever you need to rebuild the native module.
 
-`vite.config.js` applies the compiler to `src/App.jsx` with `panicThreshold: 'all_errors'`, so compiler errors appear during development and fail the build.
-
-Validated on macOS Apple Silicon with Node.js 22.22.2 and Cargo 1.99.0. Other platforms are not verified.
+`vite.config.js` enables the Rust Babel adapter with `panicThreshold: 'all_errors'`, so compiler errors appear during development and fail the build.

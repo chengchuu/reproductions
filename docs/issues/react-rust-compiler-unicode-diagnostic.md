@@ -24,10 +24,10 @@ yarn build
 
 Link to code example: [React Rust compiler Unicode diagnostic reproduction](https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-unicode-diagnostic)
 
-The component intentionally mutates props:
+The component in `src/main.jsx` intentionally mutates props:
 
 ```jsx
-export default function App(props) {
+function App(props) {
   const text = "café"; props.value = text;
   return <h1>{props.value}</h1>;
 }
@@ -40,7 +40,7 @@ Keep `"café"` and `props.value` on the same line.
 The build correctly fails with `This value cannot be modified`, but the underline starts on the space before `props`:
 
 ```text
-> 2 |   const text = "café"; props.value = text;
+> 5 |   const text = "café"; props.value = text;
     |                       ^^^^^ value cannot be modified
 ```
 
@@ -49,7 +49,7 @@ The build correctly fails with `This value cannot be modified`, but the underlin
 The same diagnostic should underline `props`, starting at `p`:
 
 ```text
-> 2 |   const text = "café"; props.value = text;
+> 5 |   const text = "café"; props.value = text;
     |                        ^^^^^ value cannot be modified
 ```
 

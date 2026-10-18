@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [
     react(),
     babel({
-      include: /[\\/]src[\\/]App\.jsx$/,
       plugins: [
         ['babel-plugin-react-compiler-rust', { panicThreshold: 'all_errors' }],
       ],
