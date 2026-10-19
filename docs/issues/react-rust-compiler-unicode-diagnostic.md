@@ -1,60 +1,57 @@
-# [rust-compiler] Diagnostic underline shifts left after non-ASCII text
+# Bug: [rust-compiler] Diagnostic underline shifts left after non-ASCII text
 
-Draft only: replace `<REPRO_COMMIT>` with the published reproduction commit before submitting this issue. Neither the issue nor this reproduction has been published yet.
+The experimental [`babel-plugin-react-compiler-rust`](https://github.com/react/react/tree/main/compiler/packages/babel-plugin-react-compiler-rust) adapter reports the correct props-mutation error, but places its diagnostic underline one column too far left when `"café"` appears before the mutation on the same line.
 
-## Description
+The React team introduced this adapter as part of the [experimental Rust compiler port (#36173)](https://github.com/react/react/pull/36173).
 
-The experimental Rust Babel adapter reports the correct props-mutation error, but its diagnostic underline starts one column too far left when `café` appears before the mutation on the same line. This is a diagnostic-formatting issue, not an incorrect rejection of valid code.
+- React version: **19.3.1**
+- Compiler: **experimental Rust React Compiler**
+- Upstream source revision: [`098d2e87a1`](https://github.com/react/react/commit/098d2e87a1f7142947418d15f63f975b58c4685b)
 
-## Reproduction
+Tested on macOS Apple Silicon with Node.js 22.22.2, Yarn 1.22.22, and Cargo 1.99.0.
 
-[Reproduction source](https://github.com/chengchuu/reproductions/tree/<REPRO_COMMIT>/react/rust-compiler-unicode-diagnostic)
+## Steps To Reproduce
 
-With Node.js, Yarn Classic 1.22.22, Git, Rust/Cargo, and native build tools installed:
+1. Install Node.js, Yarn Classic, Git, Rust/Cargo, and native build tools.
+2. Clone the reproduction and run its Vite build:
 
 ```bash
 git clone https://github.com/chengchuu/reproductions.git
-cd reproductions
-git switch --detach <REPRO_COMMIT>
-cd react/rust-compiler-unicode-diagnostic
+cd reproductions/react/rust-compiler-unicode-diagnostic
 yarn install
 yarn setup
 yarn build
 ```
 
-The setup builds the original Rust compiler from React commit `b74939d79055ec2f82364cf14089a15f5f3a95bc`. Vite runs its Babel adapter with `panicThreshold: 'all_errors'`.
+`yarn setup` builds the pinned Rust compiler from source. The Vite configuration sets `panicThreshold: 'all_errors'` on the Babel adapter so compiler errors fail the build.
+
+Link to code example: [React Rust compiler Unicode diagnostic reproduction](https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-unicode-diagnostic)
+
+The component in `src/main.jsx` intentionally mutates props:
 
 ```jsx
-export default function App(props) {
+function App(props) {
   const text = "café"; props.value = text;
   return <h1>{props.value}</h1>;
 }
 ```
 
-## Actual behavior
+Keep `"café"` and `props.value` on the same line.
 
-The build fails with `This value cannot be modified`. Its underline starts on the space before `props`:
+## The current behavior
+
+The build correctly fails with `This value cannot be modified`, but the underline starts on the space before `props`:
 
 ```text
-> 2 |   const text = "café"; props.value = text;
+> 5 |   const text = "café"; props.value = text;
     |                       ^^^^^ value cannot be modified
 ```
 
-## Expected behavior
+## The expected behavior
 
-The same error should underline `props`:
+The build should still report the props-mutation error, with the underline starting at `p` in `props`:
 
 ```text
-> 2 |   const text = "café"; props.value = text;
+> 5 |   const text = "café"; props.value = text;
     |                        ^^^^^ value cannot be modified
 ```
-
-## Environment
-
-- macOS Apple Silicon
-- Node.js 22.22.2; Cargo 1.99.0
-- React Rust compiler: `b74939d79055ec2f82364cf14089a15f5f3a95bc`
-- Vite 8.3.4; `@vitejs/plugin-react` 6.1.2; `@rolldown/plugin-babel` 0.2.4
-- React and React DOM 19.3.1
-
-The formatter mixes Babel's UTF-16 columns with UTF-8 byte offsets. The reproduction uses the unpublished Rust Babel adapter; it does not establish a bug in the published TypeScript compiler or the Oxc integration.

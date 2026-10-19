@@ -4,7 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const commit = 'b74939d79055ec2f82364cf14089a15f5f3a95bc';
+const commit = '098d2e87a1f7142947418d15f63f975b58c4685b';
+const repository = 'https://github.com/react/react.git';
 const source = path.join(root, '.cache/react');
 const target = path.join(root, '.cache/target');
 const run = (command, args, cwd = root) => execFileSync(command, args, { cwd, stdio: 'inherit' });
@@ -12,7 +13,9 @@ const run = (command, args, cwd = root) => execFileSync(command, args, { cwd, st
 if (!existsSync(path.join(source, '.git'))) {
   mkdirSync(source, { recursive: true });
   run('git', ['init', source]);
-  run('git', ['remote', 'add', 'origin', 'https://github.com/chengchuu/react.git'], source);
+  run('git', ['remote', 'add', 'origin', repository], source);
+} else {
+  run('git', ['remote', 'set-url', 'origin', repository], source);
 }
 run('git', ['fetch', '--depth=1', '--filter=blob:none', 'origin', commit], source);
 run('git', ['sparse-checkout', 'set', 'compiler'], source);
@@ -38,4 +41,4 @@ cpSync(path.join(adapter, 'dist'), path.join(vendor, 'dist'), { recursive: true 
 mkdirSync(path.join(vendor, 'native'), { recursive: true });
 copyFileSync(path.join(target, 'debug', library), path.join(vendor, 'native/index.node'));
 copyFileSync(path.join(source, 'LICENSE'), path.join(vendor, 'LICENSE'));
-console.log(`Built the original Rust compiler at ${commit}. Run yarn build to see the diagnostic.`);
+console.log(`Built the Rust React Compiler from ${repository} at ${commit}.`);
