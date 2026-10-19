@@ -1,6 +1,6 @@
 # Bug: [rust-compiler] Diagnostic underline shifts left after non-ASCII text
 
-The experimental [`babel-plugin-react-compiler-rust`](https://github.com/react/react/tree/main/compiler/packages/babel-plugin-react-compiler-rust) adapter reports the correct props-mutation error, but places its diagnostic underline one column too far left when `"café"` appears before the mutation on the same line.
+The experimental [`babel-plugin-react-compiler-rust`](https://github.com/react/react/tree/main/compiler/packages/babel-plugin-react-compiler-rust) adapter correctly reports a props-mutation error. However, when `"café"` appears before the mutation on the same line, the diagnostic underline starts one column too far left.
 
 The React team introduced this adapter as part of the [experimental Rust compiler port (#36173)](https://github.com/react/react/pull/36173).
 
@@ -13,7 +13,7 @@ Tested on macOS Apple Silicon with Node.js 22.22.2, Yarn 1.22.22, and Cargo 1.99
 ## Steps To Reproduce
 
 1. Install Node.js, Yarn Classic, Git, Rust/Cargo, and native build tools.
-2. Clone the reproduction and run its Vite build:
+2. Clone the example, install its dependencies, and run the setup and build commands:
 
 ```bash
 git clone https://github.com/chengchuu/reproductions.git
@@ -23,7 +23,7 @@ yarn setup
 yarn build
 ```
 
-`yarn setup` builds the pinned Rust compiler from source. The Vite configuration sets `panicThreshold: 'all_errors'` on the Babel adapter so compiler errors fail the build.
+`yarn setup` builds the pinned Rust compiler from source. The Babel adapter uses `panicThreshold: 'all_errors'`, which makes compiler errors fail the Vite build.
 
 Link to code example: [React Rust compiler Unicode diagnostic reproduction](https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-unicode-diagnostic)
 
@@ -49,7 +49,7 @@ The build correctly fails with `This value cannot be modified`, but the underlin
 
 ## The expected behavior
 
-The build should still report the props-mutation error, with the underline starting at `p` in `props`:
+The build should still fail with the props-mutation error. The underline should start at `p` in `props`:
 
 ```text
 > 5 |   const text = "café"; props.value = text;
