@@ -1,6 +1,8 @@
 # Bug: [rust-compiler] Diagnostic underline shifts left after non-ASCII text
 
-The experimental `babel-plugin-react-compiler-rust` adapter reports the correct props-mutation error, but places its diagnostic underline one column too far left when `"café"` appears before the mutation on the same line.
+The experimental [`babel-plugin-react-compiler-rust`](https://github.com/react/react/tree/main/compiler/packages/babel-plugin-react-compiler-rust) adapter reports the correct props-mutation error, but places its diagnostic underline one column too far left when `"café"` appears before the mutation on the same line.
+
+The React team introduced this adapter as part of the [experimental Rust compiler port (#36173)](https://github.com/react/react/pull/36173).
 
 React version: **19.3.1**
 Compiler: **experimental Rust React Compiler**
