@@ -4,9 +4,10 @@ The experimental [`babel-plugin-react-compiler-rust`](https://github.com/react/r
 
 The React team introduced this adapter as part of the [experimental Rust compiler port (#36173)](https://github.com/react/react/pull/36173).
 
-React version: **19.3.1**
-Compiler: **experimental Rust React Compiler**
-Upstream source revision: [`098d2e87a1`](https://github.com/react/react/commit/098d2e87a1f7142947418d15f63f975b58c4685b).
+- React version: **19.3.1**
+- Compiler: **experimental Rust React Compiler**
+- Upstream source revision: [`098d2e87a1`](https://github.com/react/react/commit/098d2e87a1f7142947418d15f63f975b58c4685b)
+
 Tested on macOS Apple Silicon with Node.js 22.22.2, Yarn 1.22.22, and Cargo 1.99.0.
 
 ## Steps To Reproduce
@@ -22,7 +23,7 @@ yarn setup
 yarn build
 ```
 
-`yarn setup` builds the pinned Rust compiler from source. The Vite configuration uses its Babel adapter with `panicThreshold: 'all_errors'`.
+`yarn setup` builds the pinned Rust compiler from source. The Vite configuration sets `panicThreshold: 'all_errors'` on the Babel adapter so compiler errors fail the build.
 
 Link to code example: [React Rust compiler Unicode diagnostic reproduction](https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-unicode-diagnostic)
 
@@ -48,11 +49,9 @@ The build correctly fails with `This value cannot be modified`, but the underlin
 
 ## The expected behavior
 
-The same diagnostic should underline `props`, starting at `p`:
+The build should still report the props-mutation error, with the underline starting at `p` in `props`:
 
 ```text
 > 5 |   const text = "café"; props.value = text;
     |                        ^^^^^ value cannot be modified
 ```
-
-The props-mutation error is expected; its underline should point to the correct location.
