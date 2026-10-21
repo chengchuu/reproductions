@@ -1,16 +1,16 @@
 # TypeScript LSP shutdown exit code
 
-Reproduces [TypeScript #64742](https://github.com/microsoft/TypeScript/issues/64742): the language server prints `context canceled` and exits with code 1 after a normal `shutdown` followed by `exit`.
+This example reproduces [TypeScript #64742](https://github.com/microsoft/TypeScript/issues/64742): the language server prints `context canceled` and exits with code 1 after a normal `shutdown` followed by `exit`.
 
-`repro.py` is the original Python script provided by [creasty](https://github.com/creasty) in the issue.
+`repro.py` comes from [creasty](https://github.com/creasty)’s original issue report.
 
 ## Requirements
 
-Python 3.8 or later, Git, and Go 1.27. No third-party Python packages are required.
+You need Python 3.8 or later, Git, and Go 1.27. The script uses only the Python standard library.
 
 ## Reproduce
 
-From this example's directory, fetch the affected revision without its history, build the compiler, and run the script:
+Run these commands from this example's directory to fetch a single affected revision, build the compiler, and reproduce the bug:
 
 ```bash
 build_dir="$(mktemp -d)"
@@ -32,8 +32,8 @@ context canceled
 exit code: 1
 ```
 
-The script initializes the server, waits for the `shutdown` response, then sends `exit` with stdin open. It prints the server's exit code but does not use it as its own shell exit status.
+The script initializes the server, waits for the `shutdown` response, then sends `exit` while keeping stdin open. The printed exit code belongs to the server; the Python script itself still exits successfully.
 
 ## Validation
 
-Confirmed on macOS ARM64 at the pinned revision: the server printed `context canceled` and exited with code 1.
+Tested on macOS ARM64 with the revision used in these commands. The server printed `context canceled` and exited with code 1.
