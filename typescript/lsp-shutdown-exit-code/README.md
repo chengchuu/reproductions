@@ -2,15 +2,15 @@
 
 Reproduces [TypeScript #64742](https://github.com/microsoft/TypeScript/issues/64742): the language server prints `context canceled` and exits with code 1 after a normal `shutdown` followed by `exit`.
 
-`repro.py` is the original script from the issue, reported by [creasty](https://github.com/creasty).
+`repro.py` is the original Python script provided by [creasty](https://github.com/creasty) in the issue.
 
 ## Requirements
 
-Python 3.8 or later, Git, and Go 1.27. No Python packages are required.
+Python 3.8 or later, Git, and Go 1.27. No third-party Python packages are required.
 
 ## Reproduce
 
-From this example's directory, fetch only the known affected revision, build it, and run the script:
+From this example's directory, fetch the affected revision without its history, build the compiler, and run the script:
 
 ```bash
 build_dir="$(mktemp -d)"
@@ -32,8 +32,8 @@ context canceled
 exit code: 1
 ```
 
-The script initializes the server, waits for the shutdown response, then sends `exit` while keeping stdin open. It prints the server's exit code rather than returning it as its own shell exit status.
+The script initializes the server, waits for the `shutdown` response, then sends `exit` with stdin open. It prints the server's exit code but does not use it as its own shell exit status.
 
 ## Validation
 
-Reproduced on macOS ARM64 at the pinned revision above. The server printed `context canceled` and exited with code 1.
+Confirmed on macOS ARM64 at the pinned revision: the server printed `context canceled` and exited with code 1.
