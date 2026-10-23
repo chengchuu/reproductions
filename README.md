@@ -8,5 +8,6 @@ Each project has its own dependencies, setup instructions, and expected result. 
 | --- | --- |
 | [React Rust compiler Unicode diagnostic](react/rust-compiler-unicode-diagnostic/) | The experimental Rust Babel adapter places a diagnostic underline too far left after a non-ASCII character. |
 | [TypeScript LSP shutdown exit code](typescript/lsp-shutdown-exit-code/) | The language server exits with code 1 after a normal `shutdown` followed by `exit` (#64742). |
+| [TypeScript LSP referenced project rebuild](typescript/lsp-referenced-project-rebuild/) | Opening app files repeatedly builds and deletes an unrelated referenced project (#64862). |
 
 Issue drafts are kept in [docs/issues](docs/issues/).
