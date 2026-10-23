@@ -6,7 +6,7 @@ The solution references `tsconfig.app.json` for `src` and `tsconfig.node.json` f
 
 ## Reproduce
 
-Run these commands from this example's directory using Go 1.27 and Python 3.8 or later:
+Run these commands from this example's directory:
 
 ```bash
 build_dir="$(mktemp -d)"
