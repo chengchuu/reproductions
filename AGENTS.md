@@ -84,10 +84,20 @@ The script counts unrelated project creations, completed program updates, and de
 - Edit setup scripts or source inputs, not generated adapters or binaries. Keep generated files out of commits.
 - Preserve issue links, attribution, exact errors, and the distinction between actual and expected behavior.
 
+## README writing style
+
+- Keep each example concise, natural, and understandable in under 60 seconds. Use direct language and avoid repeating what the commands or output already show.
+- Focus on reproducing the issue. Do not add fix comparisons or fix-validation instructions unless requested.
+- Lead with the issue link and a brief description of the bug, followed by reproduction commands and expected output.
+- Fold prerequisites into the reproduction introduction instead of adding a separate Requirements or environment section. Include only tools, versions, and setup details needed to run the example.
+- Omit validation history, repeated-run summaries, and control experiments from the README unless they are needed to understand or reproduce the issue. Keep relevant evidence in the task report or issue draft.
+- Explain exit codes when success means the bug reproduced or when the script's status differs from the program's status. Retain limitations that affect interpretation of the result.
+- Preserve commands, identifiers, URLs, pinned revisions, exact output, and documented behavior during wording edits.
+
 ## Validation
 
 Run the affected example and compare its output with its README. Shell success alone is insufficient: the React build fails intentionally, the shutdown script prints the server's failure, and the rebuild script succeeds when it detects the bug.
 
-Record the revision, OS/architecture, tool versions, commands, and results. Distinguish source-archive builds from verified clone instructions; report only tested platforms and measured behavior.
+Record the revision, OS/architecture, tool versions, commands, and results in the task report or issue draft as appropriate; a README does not need a validation section. Distinguish source-archive builds from verified clone instructions; report only tested platforms and measured behavior.
 
 For prose-only changes, check paths, commands, Markdown, and the final diff without rebuilding upstream projects. There is no root lint or format command. Use `git diff --check` for tracked changes and inspect new files separately.
