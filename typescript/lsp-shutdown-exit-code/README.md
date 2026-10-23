@@ -4,10 +4,6 @@ This example reproduces [TypeScript #64742](https://github.com/microsoft/TypeScr
 
 `repro.py` comes from [creasty](https://github.com/creasty)’s original issue report.
 
-## Requirements
-
-You need Python 3.8 or later, Git, and Go 1.27. The script uses only the Python standard library.
-
 ## Reproduce
 
 Run these commands from this example's directory to fetch a single affected revision, build the compiler, and reproduce the bug:

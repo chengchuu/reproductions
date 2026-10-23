@@ -2,10 +2,6 @@
 
 A minimal React + Vite project using the experimental Rust React Compiler through its Babel adapter.
 
-## Requirements
-
-Node.js, Yarn Classic, Git, Rust/Cargo, and native build tools.
-
 ## Get started
 
 ```bash
