@@ -21,7 +21,7 @@ GOWORK=off go -C "$build_dir/source/tsc" build -mod=readonly \
 python3 repro.py --tsc "$build_dir/bin/tsc" --log "$build_dir/server.log"
 ```
 
-Expected output when the bug reproduces:
+Output when the bug reproduces:
 
 ```text
 a.ts: documentSymbol succeeded

@@ -20,7 +20,7 @@ GOWORK=off go -C "$build_dir/source/tsc" build -mod=readonly \
 echo "Exit code: $?"
 ```
 
-Expected output starts with:
+Output starts with:
 
 ```text
 panic: Diagnostic emitted without context [recovered, repanicked]
