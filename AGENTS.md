@@ -8,16 +8,43 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 
 ## Repository map
 
-| Path | Role |
-| --- | --- |
-| `README.md` | Example index and links to issue drafts. |
-| `react/rust-compiler-unicode-diagnostic/` | Misplaced diagnostic underline in the Rust React Compiler. |
-| `typescript/lsp-shutdown-exit-code/` | Incorrect LSP exit code after shutdown (#64742). |
-| `typescript/lsp-referenced-project-rebuild/` | Repeated builds of an unrelated referenced project (#64862). |
-| `docs/issues/` | Issue drafts with reproduction details. |
-| `.gitignore` | Excludes dependencies, caches, build output, native binaries, and the copied React license. |
+| Path                                                      | Role                                                                                        |
+|:----------------------------------------------------------|:--------------------------------------------------------------------------------------------|
+| `README.md`                                               | Example index and links to issue drafts.                                                    |
+| `react/compiler-signed-zero/`                             | The TypeScript implementation of the React Compiler loses the sign of negative zero.        |
+| `react/rust-compiler-unicode-diagnostic/`                 | Misplaced diagnostic underline in the Rust React Compiler.                                  |
+| `typescript/lsp-shutdown-exit-code/`                      | Incorrect LSP exit code after shutdown (#64742).                                            |
+| `typescript/lsp-referenced-project-rebuild/`              | Repeated builds of an unrelated referenced project (#64862).                                |
+| `typescript/declaration-emit-missing-diagnostic-context/` | Declaration emit panics on a labeled interface (#64666).                                    |
+| `typescript/assignment-through-type-assertion/`           | A write through a type assertion incorrectly reports TS2454 (#62127).                       |
+| `docs/issues/`                                            | Issue drafts with reproduction details.                                                     |
+| `.gitignore`                                              | Excludes dependencies, caches, build output, native binaries, and the copied React license. |
 
 ## React: setup and build flow
+
+Both React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
+
+Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft.
+
+### Signed zero
+
+From `react/compiler-signed-zero/`:
+
+```bash
+yarn install
+yarn setup
+yarn repro
+```
+
+`scripts/setup.mjs` checks out `compiler/packages/babel-plugin-react-compiler` and bundles its TypeScript entry point with esbuild into `.cache/compiler.cjs`. Dependencies remain external and resolve from the example's installed packages. This example does not require Rust; “TypeScript React Compiler” refers to React's compiler implementation, not the TypeScript language compiler.
+
+`scripts/compiler.mjs` loads the built compiler and reports a missing setup step if the bundle is absent. Both `scripts/repro.mjs` and `vite.config.js` use it through Babel with `panicThreshold: 'all_errors'`.
+
+`yarn repro` reads `src/SignedZero.jsx`, compiles it, and uses esbuild to lower JSX in both the original and compiled versions into `.cache/*.mjs`. It compares server-rendered output for `true`, `false`, and `true`. The original returns `Infinity`, `-Infinity`, and `Infinity`; the affected compiler returns `Infinity` for all three. Exit 0 means the bug reproduced; a nonzero exit means the expected bug was absent or setup or execution failed.
+
+For the browser example, `index.html` loads `src/main.jsx`, which renders `SignedZero`. The wrapper uses `'use no memo'` and shows the expected result beside the compiled result. Run `yarn dev` and click **Toggle condition**. `yarn build` creates the Vite production build; `yarn preview` serves it. A successful build alone does not verify the bug.
+
+### Rust compiler Unicode diagnostic
 
 From `react/rust-compiler-unicode-diagnostic/`:
 
@@ -27,7 +54,7 @@ yarn setup
 yarn build
 ```
 
-Use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, Git, Rust/Cargo, and native build tools.
+This example also requires Rust/Cargo and native build tools. Set `CARGO` to override the Cargo executable.
 
 `yarn setup` runs `scripts/setup.mjs`, which:
 
@@ -35,7 +62,7 @@ Use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`,
 2. Compiles the Babel adapter with TypeScript and builds `react_compiler_napi` with Cargo's `--locked` flag into `.cache/target`.
 3. Copies the adapter output, native library (`native/index.node`), and upstream license into `vendor/babel-plugin-react-compiler-rust/`.
 
-A fresh clone requires both install and setup before building. Setup reuses its caches but fetches on every run. Set `CARGO` to override the Cargo executable. Keep the source revision in `scripts/setup.mjs` consistent with the README and issue draft.
+The setup script selects the native library filename for macOS, Linux, or Windows and rejects other platforms. Platform selection in the script does not establish that reproduction has been tested on each platform.
 
 `yarn build` runs Vite with `vite.config.js`. Source passes through Babel and the native Rust compiler; diagnostics return through the adapter to the terminal. With `panicThreshold: 'all_errors'`, the intentional props mutation fails the build. Check the underline position, and keep `"café"` and the mutation on the same line.
 
@@ -43,9 +70,9 @@ The browser entry is `index.html` → `src/main.jsx` → `createRoot`. `yarn dev
 
 ## TypeScript: setup and data flow
 
-Both examples require Python 3.8 or later, Git, and Go 1.27. Follow their READMEs to fetch a pinned revision with `--depth 1` and build `./cmd/tsc` from the upstream `tsc/` module using `GOWORK=off`. Source and uncached dependencies require network access; binaries go into a temporary build directory.
+All four examples use Git and Go 1.27. Follow each README to fetch its pinned revision with `--depth 1` and build `./cmd/tsc` from the upstream `tsc/` module using `GOWORK=off` and `-mod=readonly`. Source and uncached dependencies require network access; binaries go into a temporary build directory. Run the commands from the example's directory and use the native binary built by those commands.
 
-The Python clients use only the standard library. They launch `tsc --lsp --stdio`, exchange JSON-RPC messages with `Content-Length` headers, and answer server requests while waiting for responses.
+Only the two LSP examples require Python 3.8 or later. Their clients use only the standard library. They launch `tsc --lsp --stdio`, exchange JSON-RPC messages with `Content-Length` headers, and answer server requests while waiting for responses. The other two examples contain only `README.md` and `min.ts`; they need no Python client, npm dependencies, or `tsconfig.json`.
 
 ### Shutdown exit code
 
@@ -75,6 +102,28 @@ A reader thread queues messages. With debug logging enabled, the client opens ea
 
 The script counts unrelated project creations, completed program updates, and deletions in server logs, matching paths case-insensitively. It exits 0 when each count reaches at least three, or 1 if the pattern is absent or execution fails. This check depends on log wording and does not measure large-project performance.
 
+### Declaration emit missing diagnostic context
+
+From `typescript/declaration-emit-missing-diagnostic-context/`, after building the binary:
+
+```bash
+"$build_dir/bin/tsc" --declaration --pretty false --outDir "$build_dir/out" min.ts
+echo "Exit code: $?"
+```
+
+`min.ts` declares a labeled interface and exports another interface extending it. The affected compiler prints `panic: Diagnostic emitted without context [recovered, repanicked]`, followed by a stack trace, and exits 2. Invalid input should produce diagnostics without crashing. Keep `--declaration`: the bug occurs during declaration emit. Emitted files stay in the temporary output directory.
+
+### Assignment through a type assertion
+
+From `typescript/assignment-through-type-assertion/`, after building the binary:
+
+```bash
+"$build_dir/bin/tsc" --strict --noEmit --pretty false min.ts
+echo "Exit code: $?"
+```
+
+`min.ts` assigns `1` through `(value as number)` to an uninitialized local variable. The affected compiler reports `min.ts(3,4): error TS2454: Variable 'value' is used before being assigned.` and exits 2. The assignment does not read the variable, so the code should be accepted. Preserve `--strict` and the type assertion; `--noEmit` avoids generating output beside the fixture.
+
 ## Making changes
 
 - Check `git status` and preserve unrelated work, including untracked examples.
@@ -98,7 +147,7 @@ The script counts unrelated project creations, completed program updates, and de
 
 ## Validation
 
-Run the affected example and compare its output with its README. Shell success alone is insufficient: the React build fails intentionally, the shutdown script prints the server's failure, and the rebuild script succeeds when it detects the bug.
+Run the affected example and compare its output with its README. Shell success alone is insufficient: the Unicode example's Vite build fails intentionally, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
 
 Record the revision, OS/architecture, tool versions, commands, and results in the task report or issue draft as appropriate; a README does not need a validation section. Distinguish source-archive builds from verified clone instructions; report only tested platforms and measured behavior.
 
