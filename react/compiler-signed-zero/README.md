@@ -2,7 +2,7 @@
 
 The TypeScript React Compiler at [React revision `9ffcb463b`](https://github.com/react/react/tree/9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188) merges `0` and `-0` across branches, causing `1 / value` to return `Infinity` even when the selected value is `-0`.
 
-With Node.js `^20.19.0 || >=22.12.0`, Yarn Classic, and Git installed:
+To reproduce:
 
 ```bash
 git clone https://github.com/chengchuu/reproductions.git

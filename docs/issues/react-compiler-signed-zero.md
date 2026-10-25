@@ -10,8 +10,6 @@ Tested on macOS x86_64 with Node.js 22.21.1 and Yarn Classic 1.22.22.
 
 ## Steps To Reproduce
 
-With Node.js `^20.19.0 || >=22.12.0`, Yarn Classic, and Git installed, run:
-
 ```bash
 git clone https://github.com/chengchuu/reproductions.git
 cd reproductions/react/compiler-signed-zero
