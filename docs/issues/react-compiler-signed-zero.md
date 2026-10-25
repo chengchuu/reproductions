@@ -1,6 +1,6 @@
 # [Compiler Bug]: React Compiler loses the sign of negative zero
 
-When a component selects between `0` and `-0` based on a prop, the compiled result of `1 / value` stays at `Infinity` instead of changing with the prop.
+When a prop selects between `0` and `-0`, the compiled component returns `Infinity` for `1 / value` in both branches. The negative-zero branch should return `-Infinity`.
 
 - React version: **19.3.1**
 - Compiler: **TypeScript React Compiler, built from source**
@@ -10,7 +10,7 @@ Tested on macOS x86_64 with Node.js 22.21.1 and Yarn Classic 1.22.22.
 
 ## Steps To Reproduce
 
-Clone the example, install its dependencies, and run setup and the reproduction:
+With Node.js `^20.19.0 || >=22.12.0`, Yarn Classic, and Git installed, run:
 
 ```bash
 git clone https://github.com/chengchuu/reproductions.git
@@ -20,11 +20,11 @@ yarn setup
 yarn repro
 ```
 
-`yarn setup` builds the pinned TypeScript compiler from source. `yarn repro` compares the original and compiled component using server rendering. It exits 0 when the bug reproduces, or nonzero if setup/execution fails or the expected bug is absent.
+`yarn setup` builds the pinned TypeScript compiler from source. `yarn repro` compares server-rendered output from the original and compiled component. It exits 0 when the bug reproduces and nonzero if setup or execution fails or the expected bug is absent.
 
-Link to code example: [React Compiler signed-zero reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-signed-zero)
+Code example: [React Compiler signed-zero reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-signed-zero)
 
-The component in `src/SignedZero.jsx` selects the sign of zero based on `condition`:
+`src/SignedZero.jsx` selects between `0` and `-0` based on `condition`:
 
 ```jsx
 export function SignedZero({ condition }) {
