@@ -3,10 +3,10 @@
 When a prop selects between `0` and `-0`, the compiled component returns `Infinity` for `1 / value` in both branches. The negative-zero branch should return `-Infinity`.
 
 - React version: **19.3.1**
-- Compiler: **TypeScript React Compiler, built from source**
-- Upstream source revision: [`9ffcb463b`](https://github.com/react/react/commit/9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188)
+- Compiler: **React Compiler, built from source**
+- Compiler source commit: [`9ffcb463b`](https://github.com/react/react/commit/9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188)
 
-Tested on macOS x86_64 with Node.js 22.21.1 and Yarn Classic 1.22.22.
+Tested on macOS arm64 with Node.js 22.22.2 and Yarn Classic 1.22.22.
 
 ## Steps To Reproduce
 
@@ -18,7 +18,7 @@ yarn setup
 yarn repro
 ```
 
-`yarn setup` builds the pinned TypeScript compiler from source. `yarn repro` compares server-rendered output from the original and compiled component. It exits 0 when the bug reproduces and nonzero if setup or execution fails or the expected bug is absent.
+`yarn setup` builds the pinned TypeScript compiler from source. `yarn repro` compares the server-rendered output of the original and compiled versions of the component. It exits 0 when the bug reproduces and nonzero if setup or execution fails or the bug does not reproduce.
 
 Code example: [React Compiler signed-zero reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-signed-zero)
 
@@ -36,11 +36,11 @@ export function SignedZero({ condition }) {
 }
 ```
 
-For the browser example, run `yarn dev`, open the printed URL, and click **Toggle condition**.
+To try the browser example, run `yarn dev`, open the printed URL, and click **Toggle condition**.
 
 ## The current behavior
 
-For `condition` values `true → false → true`, the compiled component keeps returning `Infinity`:
+For `condition` values `true → false → true`, the compiled component returns `Infinity` each time:
 
 ```text
 condition=true expected=Infinity actual=Infinity
@@ -53,4 +53,4 @@ The browser example shows the same mismatch when the condition is false.
 
 ## The expected behavior
 
-The compiled component should preserve the distinction between `0` and `-0`. For `true → false → true`, it should return `Infinity → -Infinity → Infinity`, matching the original component.
+The compiled component should distinguish `0` from `-0`. For `true → false → true`, it should return `Infinity → -Infinity → Infinity`, matching the original component.
