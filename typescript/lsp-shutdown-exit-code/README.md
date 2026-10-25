@@ -21,7 +21,7 @@ GOWORK=off go -C "$build_dir/source/tsc" build -mod=readonly \
 PATH="$build_dir/bin:$PATH" python3 repro.py
 ```
 
-Expected output:
+Output:
 
 ```text
 context canceled
