@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const commit = '9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188';
 const repository = 'https://github.com/react/react.git';
+const commit = '9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188';
 const source = path.join(root, '.cache/react');
 const run = (args) => execFileSync('git', args, { cwd: source, stdio: 'inherit' });
 

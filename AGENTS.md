@@ -140,6 +140,7 @@ echo "Exit code: $?"
 - Lead with the issue link and a brief description of the bug, followed by reproduction commands and expected output.
 - Write reproduction steps for project contributors. Omit routine prerequisite introductions such as “With Node.js, Yarn Classic, and Git installed.” Mention unusual setup requirements or version constraints only when needed to reproduce or interpret the issue.
 - Use “To reproduce:” as a short transition when there is no reproduction heading. Under a heading such as `## Steps To Reproduce`, start directly with the commands or steps; do not repeat “To reproduce:”.
+- Match issue-draft heading levels to the destination form field. For React compiler content pasted into GitHub’s `### Repro steps` field, use `#### Steps To Reproduce`, `#### The current behavior`, and `#### The expected behavior`; use `#####` for subsections such as `Playground` and `Reproduction repository`. Keep the local issue title as H1. Do not apply these nested levels to standalone READMEs or unrelated issue templates.
 - Keep tested environment details in issue reports as validation evidence, separate from setup instructions.
 - Omit validation history, repeated-run summaries, and control experiments from the README unless they are needed to understand or reproduce the issue. Keep relevant evidence in the task report or issue draft.
 - Explain exit codes when success means the bug reproduced or when the script's status differs from the program's status. Retain limitations that affect interpretation of the result.
