@@ -19,10 +19,6 @@ https://playground.react.dev/#N4Igzg9grgTgxgUxALhAgHgBwjALgAgDMoA7OXASwhPwGUKBzE
 
 ## Repro steps
 
-# [Compiler Bug]: React Compiler loses the sign of negative zero
-
----
-
 When a prop selects between `0` and `-0`, the compiled component returns `Infinity` for `1 / value` in both branches. The negative-zero branch should return `-Infinity`.
 
 #### Steps To Reproduce
