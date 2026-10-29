@@ -29,7 +29,7 @@ The React team introduced this adapter as part of the [experimental Rust compile
 
 Tested on macOS Apple Silicon with Node.js 22.22.2, Yarn 1.22.22, and Cargo 1.99.0.
 
-#### Steps To Reproduce
+### Steps To Reproduce
 
 ```bash
 git clone https://github.com/chengchuu/reproductions.git
@@ -54,7 +54,7 @@ function App(props) {
 
 Keep `"café"` and `props.value` on the same line.
 
-#### The current behavior
+### The current behavior
 
 The build correctly fails with `This value cannot be modified`, but the underline starts on the space before `props`:
 
@@ -63,7 +63,7 @@ The build correctly fails with `This value cannot be modified`, but the underlin
     |                       ^^^^^ value cannot be modified
 ```
 
-#### The expected behavior
+### The expected behavior
 
 The build should still fail with the props-mutation error. The underline should start at `p` in `props`:
 
