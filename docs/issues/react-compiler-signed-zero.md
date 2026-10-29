@@ -2,6 +2,27 @@
 
 ---
 
+## What kind of issue is this?
+
+- [x] React Compiler core (the JS output is incorrect, or your app works incorrectly after optimization)
+- [ ] babel-plugin-react-compiler (build issue installing or using the Babel plugin)
+- [ ] eslint-plugin-react-hooks (build issue installing or using the eslint plugin)
+- [ ] react-compiler-healthcheck (build issue installing or using the healthcheck script)
+
+---
+
+## Link to repro
+
+https://playground.react.dev/#N4Igzg9grgTgxgUxALhAgHgBwjALgAgDMoA7OXASwhPwGUKBzEhAEwC0EYIAKYfOaiwqVq+AL4BKfMAA6NfABsEBAG4BDBVAQBuOfnwVC+bgJJCRJKbPn71mhPgC8+AAy75Y-AgVgH1-bYaWk74ALRueuKRMMqwNAA80LiYULgAfMAAjPgA9Ph2WmLxOUkp6e5iIAA0IKaEjCgg-rk5AgC2mBQKahYAshAsCMj4MiAaCqNylTVgABYQAO4AkiS4nCQaYCiEmwhiQA
+
+---
+
+## Repro steps
+
+# [Compiler Bug]: React Compiler loses the sign of negative zero
+
+---
+
 When a prop selects between `0` and `-0`, the compiled component returns `Infinity` for `1 / value` in both branches. The negative-zero branch should return `-Infinity`.
 
 #### Steps To Reproduce
@@ -51,3 +72,21 @@ Bug reproduced: the compiled result loses the branch-dependent sign.
 #### The expected behavior
 
 The compiled component should distinguish `0` from `-0`. For `true → false → true`, it should return `Infinity → -Infinity → Infinity`, matching the original component.
+
+---
+
+## How often does this bug happen?
+
+Every time
+
+---
+
+## What version of React are you using?
+
+19.3.1
+
+---
+
+## What version of React Compiler are you using?
+
+React Compiler, built from react/react commit 9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188
