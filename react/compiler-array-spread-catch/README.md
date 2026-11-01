@@ -1,6 +1,6 @@
 # React Compiler array-spread catch reproduction
 
-The experimental Rust Babel adapter removes the required catch handler around `[...1]`. The original function returns `'caught'`; the compiled function throws a `TypeError`.
+The experimental Rust Babel adapter removes the catch handler around `[...1]`. Instead of returning `'caught'`, the compiled function throws a `TypeError`.
 
 To reproduce:
 

@@ -19,7 +19,7 @@ https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5
 
 ## Repro steps
 
-The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function throws a `TypeError` when executed.
+The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function throws a `TypeError`.
 
 ### Steps To Reproduce
 
@@ -43,17 +43,17 @@ function foo() {
 
 #### Reproduction repository
 
-The [Rust Babel-adapter reproduction](../../react/compiler-array-spread-catch/) includes setup instructions and runs the same example using React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
+The [Rust Babel-adapter reproduction](../../react/compiler-array-spread-catch/) provides setup instructions for running the same example with React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
 
 ### The current behavior
 
 #### Playground
 
-The Playground output removes the catch handler. The output pane shows generated code; it does not execute `foo()`, so no runtime exception appears there.
+The generated output has no catch handler. The Playground does not execute `foo()`, so it shows no runtime exception.
 
 #### Reproduction repository
 
-The Rust-compiled function attempts to spread the non-iterable value `1`. The exception escapes instead of reaching the original catch handler:
+The Rust-compiled function throws when spreading the non-iterable value `1`. With the catch handler removed, the exception escapes:
 
 ```text
 TypeError: 1 is not iterable
@@ -61,7 +61,7 @@ TypeError: 1 is not iterable
 
 ### The expected behavior
 
-The compiler should preserve the catch handler because an array spread can throw. Calling `foo()` should return `'caught'` in both backends, matching the original function.
+The compiler should preserve the catch handler because an array spread can throw. With either backend, calling `foo()` should return `'caught'`, matching the original function.
 
 ---
 
