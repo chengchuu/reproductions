@@ -8,28 +8,30 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 
 ## Repository map
 
-| Path                                                        | Role                                                                                          |
-| :---------------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
-| `README.md`                                                 | Example index and links to issue drafts.                                                      |
-| `react/compiler-signed-zero/`                               | The TypeScript implementation of the React Compiler loses the sign of negative zero.          |
-| `react/rust-compiler-unicode-diagnostic/`                   | Misplaced diagnostic underline in the Rust React Compiler.                                    |
-| `typescript/lsp-shutdown-exit-code/`                        | Incorrect LSP exit code after shutdown (#64742).                                              |
-| `typescript/lsp-referenced-project-rebuild/`                | Repeated builds of an unrelated referenced project (#64862).                                  |
-| `typescript/declaration-emit-missing-diagnostic-context/`   | Declaration emit panics on a labeled interface (#64666).                                      |
-| `typescript/assignment-through-type-assertion/`             | A write through a type assertion incorrectly reports TS2454 (#62127).                         |
-| `docs/issues/`                                              | Issue drafts with reproduction details.                                                       |
-| `.gitignore`                                                | Excludes dependencies, caches, build output, native binaries, and the copied React license.   |
+| Path                                                      | Role                                                                                        |
+| :-------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
+| `README.md`                                               | Example index and links to issue drafts.                                                    |
+| `react/compiler-signed-zero/`                             | The TypeScript implementation of the React Compiler loses the sign of negative zero.        |
+| `react/compiler-array-spread-catch/`                      | Rust compilation removes a required catch handler around an array spread.                   |
+| `react/rust-compiler-unicode-diagnostic/`                 | Misplaced diagnostic underline in the Rust React Compiler.                                  |
+| `typescript/lsp-shutdown-exit-code/`                      | Incorrect LSP exit code after shutdown (#64742).                                            |
+| `typescript/lsp-referenced-project-rebuild/`              | Repeated builds of an unrelated referenced project (#64862).                                |
+| `typescript/declaration-emit-missing-diagnostic-context/` | Declaration emit panics on a labeled interface (#64666).                                    |
+| `typescript/assignment-through-type-assertion/`           | A write through a type assertion incorrectly reports TS2454 (#62127).                       |
+| `docs/issues/`                                            | Issue drafts with reproduction details.                                                     |
+| `.gitignore`                                              | Excludes dependencies, caches, build output, native binaries, and the copied React license. |
 
 ## React: setup and build flow
 
-Both React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
+All three React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
 
-Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft. Both scripts declare `repository` before `commit`; preserve that order so the source can be changed deliberately when requested. A pinned reproduction should continue to demonstrate the affected revision even after an upstream fix merges.
+Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft. All three scripts declare `repository` before `commit`; preserve that order so the source can be changed deliberately when requested. A pinned reproduction should continue to demonstrate the affected revision even after an upstream fix merges.
 
 Current source pins are:
 
 | Example                            | Pinned React revision                      |
 | :--------------------------------- | :----------------------------------------- |
+| `compiler-array-spread-catch`      | `a6b912fbe77f698ad43c922f206db0d4f4ad7485` |
 | `compiler-signed-zero`             | `9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188` |
 | `rust-compiler-unicode-diagnostic` | `098d2e87a1f7142947418d15f63f975b58c4685b` |
 
@@ -50,6 +52,12 @@ yarn repro
 `yarn repro` reads `src/SignedZero.jsx`, compiles it, and uses esbuild to lower JSX in both the original and compiled versions into `.cache/*.mjs`. It compares separate server renders for `true`, `false`, and `true`. These are fresh renders, not updates to one mounted component; use the browser example when checking state changes across renders. The original returns `Infinity`, `-Infinity`, and `Infinity`; the affected compiler returns `Infinity` for all three. Exit 0 means the bug reproduced; a nonzero exit means the expected bug was absent or setup or execution failed.
 
 For the browser example, `index.html` loads `src/main.jsx`, which renders `SignedZero`. The wrapper uses `'use no memo'` and shows the expected result beside the compiled result. Run `yarn dev` and click **Toggle condition**. `yarn build` creates the Vite production build; `yarn preview` serves it. A successful build alone does not verify the bug.
+
+### Array-spread catch handler
+
+From `react/compiler-array-spread-catch/`, run `yarn install`, `yarn setup`, and `yarn repro`. Setup builds the experimental Rust Babel adapter and native compiler from React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`, using the same build and vendor layout as the Unicode example. Rust/Cargo and native build tools are required; `CARGO` overrides the Cargo executable.
+
+`scripts/repro.mjs` compiles `src/foo.js` with `panicThreshold: 'all_errors'`, saves original and compiled modules under `.cache/`, and executes each during a React server render so compiler memo-cache hooks have a dispatcher. The original returns `'caught'`; the affected Rust output throws a `TypeError` for the non-iterable spread. The script prints runtime errors to stderr and exits 1 when execution throws; successful execution exits 0. Compilation and setup failures also exit nonzero. This example has no Vite or browser entry point.
 
 ### Rust compiler Unicode diagnostic
 
@@ -170,7 +178,7 @@ echo "Exit code: $?"
 
 ## Validation
 
-Run the affected example and compare its output with its README. Shell success alone is insufficient: the Unicode example's Vite build fails intentionally, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
+Run the affected example and compare its output with its README. Shell success alone is insufficient: the Unicode example's Vite build fails intentionally, the array-spread script exits 1 for the runtime error, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
 
 Record the revision, OS/architecture, tool versions, commands, and results in the task report or issue draft as appropriate; a README does not need a validation section. Distinguish source-archive builds from verified clone instructions; report only tested platforms and measured behavior.
 

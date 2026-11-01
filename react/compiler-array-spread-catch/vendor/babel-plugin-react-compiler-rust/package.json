@@ -1,0 +1,9 @@
+{
+  "name": "babel-plugin-react-compiler-rust",
+  "version": "0.0.0-experimental",
+  "private": true,
+  "main": "dist/index.js",
+  "dependencies": {
+    "@babel/types": "^7.26.0"
+  }
+}

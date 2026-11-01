@@ -25,7 +25,7 @@ The compiler removes a required catch handler around an array spread. The origin
 
 #### Playground
 
-1. Open the [React Compiler Playground](https://playground.react.dev/).
+1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA).
 2. Compile this function:
 
 ```js
@@ -43,15 +43,17 @@ function foo() {
 
 #### Reproduction repository
 
-Pending: add the pinned Rust Babel-adapter reproduction link and commands. A standalone Rust reproduction has not been added to this repository yet.
-
-Recorded fixture runtime evaluation reproduced the bug in both the TypeScript and Rust backends against React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
+The [Rust Babel-adapter reproduction](../../react/compiler-array-spread-catch/) includes setup instructions and runs the same example using React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
 
 ### The current behavior
 
+#### Playground
+
 The Playground output removes the catch handler. The output pane shows generated code; it does not execute `foo()`, so no runtime exception appears there.
 
-Executing the compiled function attempts to spread the non-iterable value `1`. The exception escapes instead of reaching the original catch handler:
+#### Reproduction repository
+
+The Rust-compiled function attempts to spread the non-iterable value `1`. The exception escapes instead of reaching the original catch handler:
 
 ```text
 TypeError: 1 is not iterable
@@ -65,16 +67,16 @@ The compiler should preserve the catch handler because an array spread can throw
 
 ## How often does this bug happen?
 
-Every time in the recorded fixture runtime evaluation.
+Every time
 
 ---
 
 ## What version of React are you using?
 
-Not recorded for this reproduction.
+19.3.1
 
 ---
 
 ## What version of React Compiler are you using?
 
-The TypeScript and Rust compiler backends at react/react revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`. The deployed Playground compiler revision has not been recorded.
+The TypeScript and Rust compiler backends at react/react revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
