@@ -43,7 +43,7 @@ function foo() {
 
 #### Reproduction repository
 
-The [Rust Babel-adapter reproduction](../../react/compiler-array-spread-catch/) provides setup instructions for running the same example with React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
+The [Rust Babel-adapter reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-array-spread-catch) provides setup instructions for running the same example with React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
 
 ### The current behavior
 
@@ -79,4 +79,4 @@ Every time
 
 ## What version of React Compiler are you using?
 
-The TypeScript and Rust compiler backends at react/react revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
+Rust compiler backends at react/react revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.

@@ -19,3 +19,5 @@ Output when the bug reproduces:
 ```text
 TypeError: 1 is not iterable
 ```
+
+When the bug is fixed, `yarn repro` prints nothing and exits with code 0.
