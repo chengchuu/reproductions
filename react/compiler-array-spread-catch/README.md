@@ -2,6 +2,17 @@
 
 The experimental Rust Babel adapter removes the catch handler around `[...1]`. Instead of returning `'caught'`, the compiled function throws a `TypeError`.
 
+```js
+function foo() {
+  'use memo';
+  try {
+    return [...1];
+  } catch {
+    return 'caught';
+  }
+}
+```
+
 To reproduce:
 
 ```bash
