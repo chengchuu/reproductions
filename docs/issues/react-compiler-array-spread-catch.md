@@ -41,11 +41,29 @@ function foo() {
 
 3. Inspect the generated output: `[...1]` remains, but its `try/catch` is removed.
 
+```js
+import { c as _c } from "react/compiler-runtime";
+function foo() {
+  "use memo";
+  const $ = _c(1);
+  let t0;
+  if ($[0] === Symbol.for("react.memo_cache_sentinel")) {
+    t0 = [...1];
+    $[0] = t0;
+  } else {
+    t0 = $[0];
+  }
+  return t0;
+}
+```
+
 #### Reproduction repository
 
 The [Rust Babel-adapter reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-array-spread-catch) provides setup instructions for running the same example with React revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
 
 ### The current behavior
+
+The compiled `foo()` throws `TypeError: 1 is not iterable` instead of returning `'caught'`.
 
 #### Playground
 
@@ -53,15 +71,17 @@ The generated output has no catch handler. The Playground does not execute `foo(
 
 #### Reproduction repository
 
-The Rust-compiled function throws when spreading the non-iterable value `1`. With the catch handler removed, the exception escapes:
-
 ```text
 TypeError: 1 is not iterable
 ```
 
+The Rust-compiled function throws when spreading the non-iterable value `1`. With the catch handler removed, the exception escapes.
+
 ### The expected behavior
 
-The compiler should preserve the catch handler because an array spread can throw. With either backend, calling `foo()` should return `'caught'`, matching the original function.
+With either backend, calling `foo()` returns `'caught'`, matching the original function.
+
+The compiler should preserve the catch handler because an array spread can throw.
 
 ---
 
