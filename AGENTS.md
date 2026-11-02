@@ -8,18 +8,19 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 
 ## Repository map
 
-| Path                                                      | Role                                                                                        |
-| :-------------------------------------------------------- | :------------------------------------------------------------------------------------------ |
-| `README.md`                                               | Example index and links to issue drafts.                                                    |
-| `react/compiler-signed-zero/`                             | The TypeScript implementation of the React Compiler loses the sign of negative zero.        |
-| `react/compiler-array-spread-catch/`                      | Rust compilation removes a required catch handler around an array spread.                   |
-| `react/rust-compiler-unicode-diagnostic/`                 | Misplaced diagnostic underline in the Rust React Compiler.                                  |
-| `typescript/lsp-shutdown-exit-code/`                      | Incorrect LSP exit code after shutdown (#64742).                                            |
-| `typescript/lsp-referenced-project-rebuild/`              | Repeated builds of an unrelated referenced project (#64862).                                |
-| `typescript/declaration-emit-missing-diagnostic-context/` | Declaration emit panics on a labeled interface (#64666).                                    |
-| `typescript/assignment-through-type-assertion/`           | A write through a type assertion incorrectly reports TS2454 (#62127).                       |
-| `docs/issues/`                                            | Issue drafts with reproduction details.                                                     |
-| `.gitignore`                                              | Excludes dependencies, caches, build output, native binaries, and the copied React license. |
+| Path                                                      | Role                                                                                                     |
+| :-------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
+| `README.md`                                               | Example index and links to issue drafts.                                                                 |
+| `react/compiler-signed-zero/`                             | The TypeScript implementation of the React Compiler loses the sign of negative zero.                     |
+| `react/compiler-array-spread-catch/`                      | The Rust compiler removes a catch handler around a throwing array spread (react/react#38093).            |
+| `react/rust-compiler-unicode-diagnostic/`                 | Misplaced diagnostic underline in the Rust React Compiler.                                               |
+| `typescript/lsp-shutdown-exit-code/`                      | Incorrect LSP exit code after shutdown (#64742).                                                         |
+| `typescript/lsp-referenced-project-rebuild/`              | Repeated builds of an unrelated referenced project (#64862).                                             |
+| `typescript/declaration-emit-missing-diagnostic-context/` | Declaration emit panics on a labeled interface (#64666).                                                 |
+| `typescript/assignment-through-type-assertion/`           | A write through a type assertion incorrectly reports TS2454 (#62127).                                    |
+| `docs/issues/`                                            | Issue drafts with reproduction details.                                                                  |
+| `.gitignore`                                              | Excludes dependencies, caches, build output, native binaries, the copied React license, and `.DS_Store`. |
+| `.vscode/settings.json`                                   | Editor settings: LF line endings, a final newline, and no trailing whitespace.                           |
 
 ## React: setup and build flow
 
@@ -157,7 +158,7 @@ echo "Exit code: $?"
 - Check `git status` and preserve unrelated work, including untracked examples.
 - Add examples under the upstream project's directory and link them from the root README.
 - Pin affected revisions and keep fixtures, commands, expected output, and issue drafts consistent.
-- Follow each example's dependency and formatting conventions. Avoid unrelated framework or package-manager changes.
+- Follow each example's dependency and formatting conventions, and the editor settings in `.vscode/settings.json`. Avoid unrelated framework or package-manager changes.
 - Keep React dependency changes in the affected example and update its Yarn lockfile when needed; there is no root dependency installation.
 - Edit setup scripts or source inputs, not generated adapters or binaries. Keep generated files out of commits.
 - Preserve issue links, attribution, exact errors, and the distinction between actual and expected behavior.
@@ -169,7 +170,7 @@ echo "Exit code: $?"
 - Lead with the issue link and a brief description of the bug, followed by reproduction commands and expected output.
 - Write reproduction steps for project contributors. Omit routine prerequisite introductions such as “With Node.js, Yarn Classic, and Git installed.” Mention unusual setup requirements or version constraints only when needed to reproduce or interpret the issue.
 - Use “To reproduce:” as a short transition when there is no reproduction heading. Under a heading such as `## Steps To Reproduce`, start directly with the commands or steps; do not repeat “To reproduce:”.
-- Follow the heading structure in `docs/issues/react-compiler-signed-zero.md` and `docs/issues/react-rust-compiler-unicode-diagnostic.md`: use H1 for the issue title, H2 for form fields such as `## Repro steps`, and H3 for `### Steps To Reproduce`, `### The current behavior`, and `### The expected behavior`. Use H4 for subsections such as `#### Playground` and `#### Reproduction repository` when needed.
+- Follow the heading structure in `docs/issues/react-compiler-signed-zero.md`, `docs/issues/react-compiler-array-spread-catch.md`, and `docs/issues/react-rust-compiler-unicode-diagnostic.md`: use H1 for the issue title, H2 for form fields such as `## Repro steps`, and H3 for `### Steps To Reproduce`, `### The current behavior`, and `### The expected behavior`. Use H4 for subsections such as `#### Playground` and `#### Reproduction repository` when needed.
 - Keep local issue-draft heading levels as written. When preparing content for GitHub, adjust nested levels only to fit the actual destination form heading; do not impose H4/H5 on local drafts. Follow each standalone README or unrelated issue template's own structure.
 - Keep tested environment details in issue reports as validation evidence, separate from setup instructions.
 - Omit validation history, repeated-run summaries, and control experiments from the README unless they are needed to understand or reproduce the issue. Keep relevant evidence in the task report or issue draft.

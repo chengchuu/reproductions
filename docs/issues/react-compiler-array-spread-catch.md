@@ -13,7 +13,7 @@
 
 ## Link to repro
 
-https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA
+https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1eRAPRaiAFQAWMCAHcw+kQAcEAURjGYyIiqJ5zmCDlc4EMAIYARgA2CBIAvkRwfjhwBuIMgtKyMMSMUVAA5gY4fNq6NgAe1rgIACZSCGBQQTjh9GEgADQgcIRoeBkoIHQMOq3slnhB0QSYALIQpQhOtCB+QUGz9U3gBqYAkpg+KfNgKGi7CGFAA
 
 ---
 
@@ -25,7 +25,7 @@ The compiler removes a required catch handler around an array spread. The origin
 
 #### Playground
 
-1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA). It loads this function:
+1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1eRAPRaiAFQAWMCAHcw+kQAcEAURjGYyIiqJ5zmCDlc4EMAIYARgA2CBIAvkRwfjhwBuIMgtKyMMSMUVAA5gY4fNq6NgAe1rgIACZSCGBQQTjh9GEgADQgcIRoeBkoIHQMOq3slnhB0QSYALIQpQhOtCB+QUGz9U3gBqYAkpg+KfNgKGi7CGFAA). It loads this function:
 
 ```js
 function foo() {
