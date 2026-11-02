@@ -23,6 +23,4 @@ condition=true expected=Infinity actual=Infinity
 Bug reproduced: the compiled result loses the branch-dependent sign.
 ```
 
-`yarn repro` compares server-rendered output from the original and compiled component. It exits 0 when the bug reproduces and nonzero if setup or execution fails or the expected bug is absent.
-
 For the browser example, run `yarn dev` and open the printed URL. Click **Toggle condition**: the expected result alternates between `Infinity` and `-Infinity`, while the compiled result stays at `Infinity`.

@@ -1,5 +1,24 @@
 # [Compiler Bug]: Rust Babel adapter misaligns diagnostic underlines after non-ASCII text
 
+---
+
+## What kind of issue is this?
+
+- [ ] React Compiler core (the JS output is incorrect, or your app works incorrectly after optimization)
+- [x] babel-plugin-react-compiler (build issue installing or using the Babel plugin)
+- [ ] eslint-plugin-react-hooks (build issue installing or using the eslint plugin)
+- [ ] react-compiler-healthcheck (build issue installing or using the healthcheck script)
+
+---
+
+## Link to repro
+
+https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-unicode-diagnostic
+
+---
+
+## Repro steps
+
 This example reproduces [React #37897](https://github.com/react/react/issues/37897): the experimental [`babel-plugin-react-compiler-rust`](https://github.com/react/react/tree/main/compiler/packages/babel-plugin-react-compiler-rust) adapter places a diagnostic underline one column too far left when `"café"` appears before a props mutation on the same line.
 
 The React team introduced this adapter as part of the [experimental Rust compiler port (#36173)](https://github.com/react/react/pull/36173).
@@ -10,7 +29,7 @@ The React team introduced this adapter as part of the [experimental Rust compile
 
 Tested on macOS Apple Silicon with Node.js 22.22.2, Yarn 1.22.22, and Cargo 1.99.0.
 
-#### Steps To Reproduce
+### Steps To Reproduce
 
 ```bash
 git clone https://github.com/chengchuu/reproductions.git
@@ -35,7 +54,7 @@ function App(props) {
 
 Keep `"café"` and `props.value` on the same line.
 
-#### The current behavior
+### The current behavior
 
 The build correctly fails with `This value cannot be modified`, but the underline starts on the space before `props`:
 
@@ -44,7 +63,7 @@ The build correctly fails with `This value cannot be modified`, but the underlin
     |                       ^^^^^ value cannot be modified
 ```
 
-#### The expected behavior
+### The expected behavior
 
 The build should still fail with the props-mutation error. The underline should start at `p` in `props`:
 
@@ -52,3 +71,21 @@ The build should still fail with the props-mutation error. The underline should 
 > 5 |   const text = "café"; props.value = text;
     |                        ^^^^^ value cannot be modified
 ```
+
+---
+
+## How often does this bug happen?
+
+Every time
+
+---
+
+## What version of React are you using?
+
+19.3.1
+
+---
+
+## What version of React Compiler are you using?
+
+babel-plugin-react-compiler-rust (0.0.0-experimental), built from react/react commit 098d2e87a1f7142947418d15f63f975b58c4685b

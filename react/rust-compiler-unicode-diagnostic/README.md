@@ -15,3 +15,12 @@ yarn build
 `yarn setup` builds the compiler and Babel adapter from [React revision `098d2e87a1`](https://github.com/react/react/tree/098d2e87a1f7142947418d15f63f975b58c4685b/compiler).
 
 The sample in `src/main.jsx` intentionally mutates props. With `panicThreshold: 'all_errors'` enabled in `vite.config.js`, `yarn build` reports the compiler diagnostic and exits with an error.
+
+Diagnostic excerpt:
+
+```text
+> 5 |   const text = "café"; props.value = text;
+    |                       ^^^^^ value cannot be modified
+```
+
+The underline starts on the space before `props`; it should start at `p`.

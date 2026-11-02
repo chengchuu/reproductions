@@ -7,6 +7,7 @@ Each project has its own dependencies, setup instructions, and expected result. 
 | Project | What it reproduces |
 | --- | --- |
 | [React Compiler signed zero](react/compiler-signed-zero/) | The TypeScript compiler merges `0` and `-0` across branches, changing the result of `1 / value`. |
+| [React Compiler array-spread catch handler](react/compiler-array-spread-catch/) | The Rust compiler removes a catch handler around a throwing array spread. |
 | [React Rust compiler Unicode diagnostic](react/rust-compiler-unicode-diagnostic/) | The experimental Rust Babel adapter places a diagnostic underline too far left after a non-ASCII character. |
 | [TypeScript LSP shutdown exit code](typescript/lsp-shutdown-exit-code/) | The language server exits with code 1 after a normal `shutdown` followed by `exit` (#64742). |
 | [TypeScript LSP referenced project rebuild](typescript/lsp-referenced-project-rebuild/) | Opening app files repeatedly builds and deletes an unrelated referenced project (#64862). |
