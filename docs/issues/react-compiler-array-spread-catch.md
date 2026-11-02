@@ -99,4 +99,4 @@ Every time
 
 ## What version of React Compiler are you using?
 
-Rust compiler backends at react/react revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
+TypeScript (Playground) and Rust at revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
