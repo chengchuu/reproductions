@@ -19,33 +19,50 @@ https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5
 
 ## Repro steps
 
-The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function throws a `TypeError`.
+The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function will throw `TypeError: 1 is not iterable` from `[...1]`.
 
 ### Steps To Reproduce
 
 #### Playground
 
-1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA).
-2. Compile this function:
+1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA). It loads this function:
 
 ```js
 function foo() {
   'use memo';
   try {
-    return [...1];
+    return [...1]; // Throws TypeError: 1 is not iterable
   } catch {
-    return 'caught';
+    return 'caught'; // Expected result
   }
 }
 ```
 
-3. Inspect the generated output: `[...1]` remains, but its `try/catch` is removed.
+2. Inspect the generated output: `[...1]` remains, but its `try/catch` is removed.
+
+```js
+import { c as _c } from "react/compiler-runtime";
+function foo() {
+  "use memo";
+  const $ = _c(1);
+  let t0;
+  if ($[0] === Symbol.for("react.memo_cache_sentinel")) {
+    t0 = [...1]; // Still throws, but no try/catch remains
+    $[0] = t0;
+  } else {
+    t0 = $[0];
+  }
+  return t0;
+}
+```
 
 #### Reproduction repository
 
-The [Rust Babel-adapter reproduction](../../react/compiler-array-spread-catch/) provides setup instructions for running the same example with React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
+The [Rust Babel-adapter reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-array-spread-catch) provides setup instructions for running the same example with React revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
 
 ### The current behavior
+
+The compiled `foo()` throws `TypeError: 1 is not iterable` instead of returning `'caught'`.
 
 #### Playground
 
@@ -53,15 +70,17 @@ The generated output has no catch handler. The Playground does not execute `foo(
 
 #### Reproduction repository
 
-The Rust-compiled function throws when spreading the non-iterable value `1`. With the catch handler removed, the exception escapes:
-
 ```text
 TypeError: 1 is not iterable
 ```
 
+The Rust-compiled function throws when spreading the non-iterable value `1`. With the catch handler removed, the exception escapes.
+
 ### The expected behavior
 
-The compiler should preserve the catch handler because an array spread can throw. With either backend, calling `foo()` should return `'caught'`, matching the original function.
+With either backend, calling `foo()` should return `'caught'`, as the original function does.
+
+The compiler should preserve the catch handler because an array spread can throw.
 
 ---
 
@@ -79,4 +98,4 @@ Every time
 
 ## What version of React Compiler are you using?
 
-The TypeScript and Rust compiler backends at react/react revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`.
+TypeScript (Playground) and Rust at revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
