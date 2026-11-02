@@ -32,9 +32,9 @@ The compiler removes a required catch handler around an array spread. The origin
 function foo() {
   'use memo';
   try {
-    return [...1];
+    return [...1]; // Throws TypeError: 1 is not iterable
   } catch {
-    return 'caught';
+    return 'caught'; // Expected result
   }
 }
 ```
@@ -48,7 +48,7 @@ function foo() {
   const $ = _c(1);
   let t0;
   if ($[0] === Symbol.for("react.memo_cache_sentinel")) {
-    t0 = [...1];
+    t0 = [...1]; // Still throws, but no try/catch remains
     $[0] = t0;
   } else {
     t0 = $[0];
