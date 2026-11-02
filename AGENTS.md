@@ -31,7 +31,7 @@ Current source pins are:
 
 | Example                            | Pinned React revision                      |
 | :--------------------------------- | :----------------------------------------- |
-| `compiler-array-spread-catch`      | `a6b912fbe77f698ad43c922f206db0d4f4ad7485` |
+| `compiler-array-spread-catch`      | `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25` |
 | `compiler-signed-zero`             | `9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188` |
 | `rust-compiler-unicode-diagnostic` | `098d2e87a1f7142947418d15f63f975b58c4685b` |
 
@@ -55,7 +55,7 @@ For the browser example, `index.html` loads `src/main.jsx`, which renders `Signe
 
 ### Array-spread catch handler
 
-From `react/compiler-array-spread-catch/`, run `yarn install`, `yarn setup`, and `yarn repro`. Setup builds the experimental Rust Babel adapter and native compiler from React revision `a6b912fbe77f698ad43c922f206db0d4f4ad7485`, using the same build and vendor layout as the Unicode example. Rust/Cargo and native build tools are required; `CARGO` overrides the Cargo executable.
+From `react/compiler-array-spread-catch/`, run `yarn install`, `yarn setup`, and `yarn repro`. Setup builds the experimental Rust Babel adapter and native compiler from React revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`, using the same build and vendor layout as the Unicode example. Rust/Cargo and native build tools are required; `CARGO` overrides the Cargo executable.
 
 `scripts/repro.mjs` compiles `src/foo.js` with `panicThreshold: 'all_errors'`, saves original and compiled modules under `.cache/`, and executes each during a React server render so compiler memo-cache hooks have a dispatcher. The original returns `'caught'`; the affected Rust output throws a `TypeError` for the non-iterable spread. The script prints runtime errors to stderr and exits 1 when execution throws; successful execution exits 0. Compilation and setup failures also exit nonzero. This example has no Vite or browser entry point.
 

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const repository = 'https://github.com/react/react.git';
-const commit = 'a6b912fbe77f698ad43c922f206db0d4f4ad7485';
+const commit = '76baa3b5434fad315ece9cfd4d20d7a8d6c34a25';
 const source = path.join(root, '.cache/react');
 const target = path.join(root, '.cache/target');
 const run = (command, args, cwd = root) => execFileSync(command, args, { cwd, stdio: 'inherit' });
