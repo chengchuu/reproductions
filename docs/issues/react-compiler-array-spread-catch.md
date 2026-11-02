@@ -19,7 +19,7 @@ https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5
 
 ## Repro steps
 
-The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function will throw `TypeError: 1 is not iterable`.
+The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function will throw `TypeError: 1 is not iterable` from `[...1]`.
 
 ### Steps To Reproduce
 
