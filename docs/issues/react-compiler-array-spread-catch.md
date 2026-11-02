@@ -25,8 +25,7 @@ The compiler removes a required catch handler around an array spread. The origin
 
 #### Playground
 
-1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA).
-2. Compile this function:
+1. Open the [React Compiler Playground reproduction](https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1+DAL5E4AQxxwAFuIaDpsmMUb6oAcyM4+ErfS0gANCDiE0eOyggdAwA9CE+7AAOeAA2BgSYALIQACYIyES0IHoxMVlunuBGEADuAJKYOAhWOWAoaLUIWkA). It loads this function:
 
 ```js
 function foo() {
@@ -39,7 +38,7 @@ function foo() {
 }
 ```
 
-3. Inspect the generated output: `[...1]` remains, but its `try/catch` is removed.
+2. Inspect the generated output: `[...1]` remains, but its `try/catch` is removed.
 
 ```js
 import { c as _c } from "react/compiler-runtime";
@@ -79,7 +78,7 @@ The Rust-compiled function throws when spreading the non-iterable value `1`. Wit
 
 ### The expected behavior
 
-With either backend, calling `foo()` returns `'caught'`, matching the original function.
+With either backend, calling `foo()` should return `'caught'`, as the original function does.
 
 The compiler should preserve the catch handler because an array spread can throw.
 
