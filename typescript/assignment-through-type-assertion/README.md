@@ -2,6 +2,13 @@
 
 This example reproduces [TypeScript #62127](https://github.com/microsoft/TypeScript/issues/62127): an assignment through a type assertion incorrectly reports that the variable is used before being assigned.
 
+```ts
+function example() {
+  let value: number;
+  (value as number) = 1;
+}
+```
+
 ## Reproduce
 
 Run these commands from this example's directory:
@@ -27,4 +34,4 @@ min.ts(3,4): error TS2454: Variable 'value' is used before being assigned.
 Exit code: 2
 ```
 
-The diagnostic is the bug: the assignment writes to `value` without reading it. The compiler should accept this code. Build artifacts stay in the temporary directory.
+The diagnostic is the bug: the assignment writes to `value` without reading it. The compiler should accept this code.
