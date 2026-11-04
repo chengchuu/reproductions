@@ -2,6 +2,11 @@
 
 This example reproduces [TypeScript #64666](https://github.com/microsoft/TypeScript/issues/64666): declaration emit panics on a labeled interface instead of reporting a diagnostic.
 
+```ts
+label: interface I {}
+export interface J extends I {}
+```
+
 ## Reproduce
 
 Run these commands from this example's directory:
@@ -26,4 +31,4 @@ Output starts with:
 panic: Diagnostic emitted without context [recovered, repanicked]
 ```
 
-A stack trace follows, then `Exit code: 2`. The nonzero exit is expected, but the panic is the bug: the compiler should report the invalid label without crashing. Build artifacts and emitted files stay in the temporary directory.
+A stack trace follows, then `Exit code: 2`. The nonzero exit is expected, but the panic is the bug: the compiler should report the invalid label without crashing.
