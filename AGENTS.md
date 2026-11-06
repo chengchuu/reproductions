@@ -10,9 +10,10 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 
 | Path                                                      | Role                                                                                                     |
 | :-------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
-| `README.md`                                               | Example index and links to issue drafts.                                                                 |
+| `README.md`                                               | Example index.                                                                                           |
 | `react/compiler-signed-zero/`                             | The TypeScript implementation of the React Compiler loses the sign of negative zero.                     |
 | `react/compiler-array-spread-catch/`                      | The Rust compiler removes a catch handler around a throwing array spread (react/react#38093).            |
+| `react/rust-compiler-surrogate-escape/`                   | Rust Babel-adapter compilation fails on a backslash followed by a lone surrogate.                        |
 | `react/rust-compiler-unicode-diagnostic/`                 | Misplaced diagnostic underline in the Rust React Compiler.                                               |
 | `typescript/lsp-shutdown-exit-code/`                      | Incorrect LSP exit code after shutdown (#64742).                                                         |
 | `typescript/lsp-referenced-project-rebuild/`              | Repeated builds of an unrelated referenced project (#64862).                                             |
@@ -24,9 +25,9 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 
 ## React: setup and build flow
 
-All three React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
+All four React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
 
-Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft. All three scripts declare `repository` before `commit`; preserve that order so the source can be changed deliberately when requested. A pinned reproduction should continue to demonstrate the affected revision even after an upstream fix merges.
+Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft. All four scripts declare `repository` before `commit`; preserve that order so the source can be changed deliberately when requested. A pinned reproduction should continue to demonstrate the affected revision even after an upstream fix merges.
 
 Current source pins are:
 
@@ -34,6 +35,7 @@ Current source pins are:
 | :--------------------------------- | :----------------------------------------- |
 | `compiler-array-spread-catch`      | `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25` |
 | `compiler-signed-zero`             | `9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188` |
+| `rust-compiler-surrogate-escape`   | `fd51cb10dd154aee73e4e7948005c02968651c3d` |
 | `rust-compiler-unicode-diagnostic` | `098d2e87a1f7142947418d15f63f975b58c4685b` |
 
 ### Signed zero
@@ -59,6 +61,22 @@ For the browser example, `index.html` loads `src/main.jsx`, which renders `Signe
 From `react/compiler-array-spread-catch/`, run `yarn install`, `yarn setup`, and `yarn repro`. Setup builds the experimental Rust Babel adapter and native compiler from React revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`, using the same build and vendor layout as the Unicode example. Rust/Cargo and native build tools are required; `CARGO` overrides the Cargo executable.
 
 `scripts/repro.mjs` compiles `src/foo.js` with `panicThreshold: 'all_errors'`, saves original and compiled modules under `.cache/`, and executes each during a React server render so compiler memo-cache hooks have a dispatcher. The original returns `'caught'`; the affected Rust output throws a `TypeError` for the non-iterable spread. The script prints runtime errors to stderr and exits 1 when execution throws; successful execution exits 0. Compilation and setup failures also exit nonzero. This example has no Vite or browser entry point.
+
+### Rust compiler surrogate escape
+
+From `react/rust-compiler-surrogate-escape/`:
+
+```bash
+yarn install
+yarn setup
+yarn build
+```
+
+Setup builds the Rust adapter and native compiler from React revision `fd51cb10dd154aee73e4e7948005c02968651c3d`, using the same setup and vendor layout as the other Rust examples. Rust/Cargo and native build tools are required; `CARGO` overrides the Cargo executable.
+
+The browser entry is `index.html` → `src/main.jsx` → `createRoot`. Its `App` component contains a string with UTF-16 code units `005C` and `D800` and should display its length, `2`. `vite.config.js` applies the Rust Babel adapter with `panicThreshold: 'all_errors'`; `yarn build` exits 1 with `Failed to parse AST JSON`. This is a compilation failure, before the app runs.
+
+Use the normal Vite scripts (`dev`, `build`, and `preview`); this example has no custom `repro` script. Preserve the three backslashes before `uD800` in `src/main.jsx`; literal escape text is a different input.
 
 ### Rust compiler Unicode diagnostic
 
@@ -157,6 +175,7 @@ echo "Exit code: $?"
 
 - Check `git status` and preserve unrelated work, including untracked examples.
 - Add examples under the upstream project's directory and link them from the root README.
+- For frontend build failures, prefer a minimal frontend project using its normal build command. Add a custom runner only when the reproduction needs runtime comparisons or protocol interactions that the project commands do not provide.
 - Pin affected revisions and keep fixtures, commands, expected output, and issue drafts consistent.
 - Follow each example's dependency and formatting conventions, and the editor settings in `.vscode/settings.json`. Avoid unrelated framework or package-manager changes.
 - Keep React dependency changes in the affected example and update its Yarn lockfile when needed; there is no root dependency installation.
@@ -167,21 +186,24 @@ echo "Exit code: $?"
 
 - Keep each example concise, natural, and understandable in under 60 seconds. Use direct language and avoid repeating what the commands or output already show.
 - Focus on reproducing the issue. Do not add fix comparisons or fix-validation instructions unless requested.
+- Omit steps that only say to observe an error already shown under current behavior. State the expected result once, without a second sentence restating the same expectation. Mention alternative tools, such as the Playground, only when needed to reproduce or interpret the issue.
+- Name the affected package directly, such as `babel-plugin-react-compiler-rust`. Omit redundant labels such as “experimental” unless they are needed to explain scope or a material limitation. Preserve package versions and identifiers exactly.
+- Describe observable behavior in issue reports: the trigger, reproduction steps, actual result, and expected result. Put the failure and exact error output first in the current-behavior section. Keep implementation-level cause analysis and fix details in PR descriptions unless explicitly requested for the issue.
 - Lead with the issue link and a brief description of the trigger and observable failure. Show a minimal, language-tagged code block before the reproduction steps when it makes the bug easier to understand; keep it identical to the relevant fixture. For project or protocol examples, use a small configuration snippet or project-reference diagram when source code alone would not explain the problem.
 - Distinguish successful requests from unnecessary work or incorrect results. Explain expected behavior and material caveats without implying that a successful build or request proves the bug is absent.
 - Write reproduction steps for project contributors. Omit routine prerequisite introductions such as “With Node.js, Yarn Classic, and Git installed.” Mention unusual setup requirements or version constraints only when needed to reproduce or interpret the issue.
 - Omit surplus statements such as “No Vite installation is needed” or “Build artifacts stay in the temporary directory.” Include dependency or output-location details only when they affect reproduction, diagnosis, or interpretation of the result.
 - Use “To reproduce:” as a short transition when there is no reproduction heading. Under a heading such as `## Steps To Reproduce`, start directly with the commands or steps; do not repeat “To reproduce:”.
-- Follow the heading structure in `docs/issues/react-compiler-signed-zero.md`, `docs/issues/react-compiler-array-spread-catch.md`, and `docs/issues/react-rust-compiler-unicode-diagnostic.md`: use H1 for the issue title, H2 for form fields such as `## Repro steps`, and H3 for `### Steps To Reproduce`, `### The current behavior`, and `### The expected behavior`. Use H4 for subsections such as `#### Playground` and `#### Reproduction repository` when needed.
+- Follow the heading structure in `docs/issues/react-compiler-signed-zero.md`, `docs/issues/react-compiler-array-spread-catch.md`, `docs/issues/react-rust-compiler-surrogate-escape.md`, and `docs/issues/react-rust-compiler-unicode-diagnostic.md`: use H1 for the issue title, H2 for form fields such as `## Repro steps`, and H3 for `### Steps To Reproduce`, `### The current behavior`, and `### The expected behavior`. Use H4 for subsections such as `#### Playground` and `#### Reproduction repository` when needed.
 - Keep local issue-draft heading levels as written. When preparing content for GitHub, adjust nested levels only to fit the actual destination form heading; do not impose H4/H5 on local drafts. Follow each standalone README or unrelated issue template's own structure.
-- Keep tested environment details in issue reports as validation evidence, separate from setup instructions.
+- Keep tested environment details in issue reports as validation evidence, separate from setup instructions. Use a concise sentence such as “Reproduced with macOS x64, Node.js 22.21.1, and Yarn Classic 1.22.22.” Preserve the recorded platform, architecture, and versions; do not copy example values into reports without validation.
 - Omit validation history, repeated-run summaries, and control experiments from the README unless they are needed to understand or reproduce the issue. Keep relevant evidence in the task report or issue draft.
 - Explain exit codes when success means the bug reproduced or when the script's status differs from the program's status. Retain limitations that affect interpretation of the result.
 - Preserve commands, identifiers, URLs, pinned revisions, exact output, and documented behavior during wording edits.
 
 ## Validation
 
-Run the affected example and compare its output with its README. Shell success alone is insufficient: the Unicode example's Vite build fails intentionally, the array-spread script exits 1 for the runtime error, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
+Run the affected example and compare its output with its README. Shell success alone is insufficient: the Unicode example's Vite build fails intentionally, the array-spread script exits 1 for the runtime error, the surrogate-escape example's Vite build fails on AST JSON parsing, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
 
 Record the revision, OS/architecture, tool versions, commands, and results in the task report or issue draft as appropriate; a README does not need a validation section. Distinguish source-archive builds from verified clone instructions; report only tested platforms and measured behavior.
 
