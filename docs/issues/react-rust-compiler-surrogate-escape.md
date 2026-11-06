@@ -29,23 +29,21 @@ function App() {
 }
 ```
 
-The string contains two UTF-16 code units: `005C` (a backslash) and `D800` (a lone high surrogate). Keep the three backslashes exactly as shown. `"\\uD800"` contains literal escape text and does not trigger this bug.
+The string contains two UTF-16 code units: `005C` (a backslash) and `D800` (a lone high surrogate). Keep all three backslashes as shown. `"\\uD800"` contains literal escape text and does not trigger this bug.
 
 ### Steps To Reproduce
 
 1. Follow the [reproduction setup instructions](https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-surrogate-escape#readme) to build the adapter from React revision `fd51cb10dd154aee73e4e7948005c02968651c3d`.
 2. Run `yarn build` from the example's directory.
-3. Observe the compilation failure while Rust parses the AST JSON.
+3. Observe the AST JSON parsing error.
 
-The Playground does not reproduce this adapter-specific transport path.
+The Playground does not use this adapter’s JSON transport, so it does not reproduce the bug.
 
 ### The current behavior
 
-The adapter serializes Babel's AST as JSON and sanitizes lone surrogates before passing it to Rust. Its sanitizer skips a surrogate escape when another backslash immediately precedes it, without accounting for escaped backslash pairs.
+The adapter serializes Babel's AST as JSON and sanitizes lone surrogates before passing it to Rust. The sanitizer checks only the preceding backslash, ignoring escaped backslash pairs. This leaves the lone surrogate unsanitized, so Rust rejects the JSON during compilation, before the app runs.
 
-For this string, the surrogate remains unsanitized and reaches Rust's JSON parser, which rejects it. The failure occurs during compilation, before any generated code executes.
-
-The Vite production build exits with code 1. The error includes:
+Compilation fails during `yarn build`, which exits with code 1 and reports:
 
 ```text
 Failed to parse AST JSON: unexpected end of hex escape at line 1 column 3364
