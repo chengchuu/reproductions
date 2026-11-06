@@ -1,4 +1,4 @@
-# [Compiler Bug]: Rust Babel adapter fails on lone surrogates after backslashes
+# [Compiler Bug]: Rust Babel adapter fails to compile lone surrogates after backslashes
 
 ---
 
@@ -13,12 +13,15 @@
 
 ## Link to repro
 
+```text
 https://github.com/chengchuu/reproductions/tree/main/react/rust-compiler-surrogate-escape
+```
 
 ---
 
 ## Repro steps
 
+````markdown
 `babel-plugin-react-compiler-rust` fails to compile a valid JavaScript string containing a literal backslash followed by a lone surrogate:
 
 ```jsx
@@ -48,7 +51,8 @@ Reproduced on macOS with Node.js 22.21.1, Yarn Classic 1.22.22, Cargo 1.99.1.
 
 ### The expected behavior
 
-The app should build and display `2`, preserving both UTF-16 code units, `005C` and `D800`.
+The app should build and display 2, preserving the original string.
+````
 
 ---
 
@@ -60,10 +64,14 @@ Every time
 
 ## What version of React are you using?
 
+```text
 19.3.1
+```
 
 ---
 
 ## What version of React Compiler are you using?
 
+```text
 `babel-plugin-react-compiler-rust`, built from react/react revision `fd51cb10dd154aee73e4e7948005c02968651c3d`.
+```

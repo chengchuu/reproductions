@@ -13,12 +13,15 @@
 
 ## Link to repro
 
+```text
 https://playground.react.dev/#N4Igzg9grgTgxgUxALhAMygOzgFwJYSYAEaEEAFAJRHAA6xRA5FGAkQLYLsSMDc9RIjhgBPGgMFEYCHLGIBtAHTKAjAF1eRAPRaiAFQAWMCAHcw+kQAcEAURjGYyIiqJ5zmCDlc4EMAIYARgA2CBIAvkRwfjhwBuIMgtKyMMSMUVAA5gY4fNq6NgAe1rgIACZSCGBQQTjh9GEgADQgcIRoeBkoIHQMOq3slnhB0QSYALIQpQhOtCB+QUGz9U3gBqYAkpg+KfNgKGi7CGFAA
+```
 
 ---
 
 ## Repro steps
 
+````markdown
 The compiler removes a required catch handler around an array spread. The original function returns `'caught'`, but the compiled function will throw `TypeError: 1 is not iterable` from `[...1]`.
 
 ### Steps To Reproduce
@@ -58,7 +61,7 @@ function foo() {
 
 #### Reproduction repository
 
-The [Rust Babel-adapter reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-array-spread-catch) provides setup instructions for running the same example with React revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
+The [Rust Babel-adapter reproduction](https://github.com/chengchuu/reproductions/tree/main/react/compiler-array-spread-catch) includes setup instructions for React revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
 
 ### The current behavior
 
@@ -74,13 +77,10 @@ The generated output has no catch handler. The Playground does not execute `foo(
 TypeError: 1 is not iterable
 ```
 
-The Rust-compiled function throws when spreading the non-iterable value `1`. With the catch handler removed, the exception escapes.
-
 ### The expected behavior
 
 With either backend, calling `foo()` should return `'caught'`, as the original function does.
-
-The compiler should preserve the catch handler because an array spread can throw.
+````
 
 ---
 
@@ -92,10 +92,14 @@ Every time
 
 ## What version of React are you using?
 
+```text
 19.3.1
+```
 
 ---
 
 ## What version of React Compiler are you using?
 
+```text
 TypeScript (Playground) and Rust at revision `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25`.
+```
