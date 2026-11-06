@@ -1,6 +1,6 @@
 # Rust React Compiler: lone surrogates after backslashes
 
-The experimental Rust React Compiler’s Babel adapter fails to compile a valid string containing a literal backslash followed by a lone surrogate:
+`babel-plugin-react-compiler-rust` fails to compile a valid string containing a literal backslash followed by a lone surrogate:
 
 ```jsx
 function App() {
