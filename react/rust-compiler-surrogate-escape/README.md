@@ -24,7 +24,7 @@ yarn build
 
 The app should build and display `2`, but `yarn build` fails while Rust parses the AST JSON.
 
-Error excerpt:
+Output:
 
 ```text
 Failed to parse AST JSON: unexpected end of hex escape at line 1 column 3364
