@@ -38,7 +38,7 @@ export function App() {
 1. Follow the [reproduction setup instructions](https://github.com/chengchuu/reproductions/tree/main/react/compiler-hook-guards#readme) to build the compiler and `react-compiler-runtime` from React revision `fd51cb10dd154aee73e4e7948005c02968651c3d`.
 2. Run `yarn dev` from the example's directory and open the URL printed in the terminal.
 
-The example configures `enableEmitHookGuards` to use `$dispatcherGuard` from the pinned runtime.
+The example enables `enableEmitHookGuards` with `$dispatcherGuard` from the pinned runtime.
 
 ### The current behavior
 
@@ -48,7 +48,7 @@ The page is blank, and the browser console reports:
 TypeError: Cannot read properties of undefined (reading 'current')
 ```
 
-`yarn build` succeeds, but serving the production bundle with `yarn preview` produces the same rendering error. Both development and production rendering were reproduced in Chrome on macOS.
+`yarn build` succeeds, but `yarn preview` reproduces the same error when the page renders. Reproduced in development and production in Chrome on macOS.
 
 ### The expected behavior
 
