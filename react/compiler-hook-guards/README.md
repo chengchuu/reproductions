@@ -30,5 +30,3 @@ TypeError: Cannot read properties of undefined (reading 'current')
 The page should display `Count: 0`, and clicking the button should increment the count.
 
 `yarn setup` builds the compiler and runtime from [React revision `fd51cb10d`](https://github.com/react/react/tree/fd51cb10dd154aee73e4e7948005c02968651c3d/compiler). `vite.config.js` enables hook guards and uses this runtime.
-
-The production build succeeds, but rendering still fails. Run `yarn build`, then `yarn preview`, and open the preview URL to reproduce the error.
