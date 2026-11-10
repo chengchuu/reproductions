@@ -48,7 +48,7 @@ The page is blank, and the browser console reports:
 TypeError: Cannot read properties of undefined (reading 'current')
 ```
 
-`yarn build` succeeds, but `yarn preview` reproduces the same error when the page renders. Reproduced in development and production in Chrome on macOS.
+Reproduced in Chrome on macOS.
 
 ### The expected behavior
 
@@ -74,5 +74,5 @@ Every time
 ## What version of React Compiler are you using?
 
 ```text
-babel-plugin-react-compiler and react-compiler-runtime, built from react/react revision fd51cb10dd154aee73e4e7948005c02968651c3d
+babel-plugin-react-compiler and react-compiler-runtime from react/react@fd51cb10dd154aee73e4e7948005c02968651c3d
 ```
