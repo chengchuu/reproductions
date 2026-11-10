@@ -6,6 +6,7 @@ Each project has its own dependencies, setup instructions, and expected result. 
 
 | Project | What it reproduces |
 | --- | --- |
+| [React Compiler hook guards](react/compiler-hook-guards/) | Compiled components crash during rendering when hook guards access modern React internals. |
 | [React Compiler signed zero](react/compiler-signed-zero/) | The TypeScript compiler merges `0` and `-0` across branches, changing the result of `1 / value`. |
 | [React Compiler array-spread catch handler](react/compiler-array-spread-catch/) | The Rust compiler removes a catch handler around a throwing array spread. |
 | [React Rust compiler surrogate escape](react/rust-compiler-surrogate-escape/) | The experimental Rust Babel adapter rejects a string containing a backslash followed by a lone surrogate. |

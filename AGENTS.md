@@ -11,6 +11,7 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 | Path                                                      | Role                                                                                                     |
 | :-------------------------------------------------------- | :------------------------------------------------------------------------------------------------------- |
 | `README.md`                                               | Example index.                                                                                           |
+| `react/compiler-hook-guards/` | Hook guards crash during rendering with modern React dispatcher internals. |
 | `react/compiler-signed-zero/`                             | The TypeScript implementation of the React Compiler loses the sign of negative zero.                     |
 | `react/compiler-array-spread-catch/`                      | The Rust compiler removes a catch handler around a throwing array spread (react/react#38093).            |
 | `react/rust-compiler-surrogate-escape/`                   | Rust Babel-adapter compilation fails on a backslash followed by a lone surrogate.                        |
@@ -25,18 +26,25 @@ Read the example's `README.md` first. Preserve the bug trigger: a failed build o
 
 ## React: setup and build flow
 
-All four React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
+All five React examples use Yarn Classic (`package.json` and `yarn.lock`), Node `^20.19.0 || >=22.12.0`, and Git. Run commands from the individual example's directory. A fresh clone requires `yarn install` and `yarn setup` before reproduction or Vite commands.
 
-Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft. All four scripts declare `repository` before `commit`; preserve that order so the source can be changed deliberately when requested. A pinned reproduction should continue to demonstrate the affected revision even after an upstream fix merges.
+Each `scripts/setup.mjs` fetches a pinned React commit into `.cache/react` with `--depth=1 --filter=blob:none` and uses sparse checkout. Setup reuses caches but fetches on every run. Keep each script's source revision consistent with its README and issue draft. All five scripts declare `repository` before `commit`; preserve that order so the source can be changed deliberately when requested. A pinned reproduction should continue to demonstrate the affected revision even after an upstream fix merges.
 
 Current source pins are:
 
 | Example                            | Pinned React revision                      |
 | :--------------------------------- | :----------------------------------------- |
 | `compiler-array-spread-catch`      | `76baa3b5434fad315ece9cfd4d20d7a8d6c34a25` |
+| `compiler-hook-guards` | `fd51cb10dd154aee73e4e7948005c02968651c3d` |
 | `compiler-signed-zero`             | `9ffcb463b0ab01a42e781d4dc2e00f3a1b97a188` |
 | `rust-compiler-surrogate-escape`   | `fd51cb10dd154aee73e4e7948005c02968651c3d` |
 | `rust-compiler-unicode-diagnostic` | `098d2e87a1f7142947418d15f63f975b58c4685b` |
+
+### Hook guards
+
+From `react/compiler-hook-guards/`, run `yarn install`, `yarn setup`, and `yarn dev`. Setup builds the pinned TypeScript compiler into `.cache/compiler.cjs` and bundles `react-compiler-runtime` into `.cache/runtime.mjs`, with React external. This example does not require Rust.
+
+`vite.config.js` enables `environment.enableEmitHookGuards` using `$dispatcherGuard` from `react-compiler-runtime` and resolves that package to the generated runtime bundle. Babel processes only `src/` so the compiler runtime is not compiled as application code. `src/App.jsx` contains a valid `useState` counter. The affected runtime crashes during browser rendering; a successful build alone does not reproduce the bug. `yarn build` and `yarn preview` reproduce it with the production bundle.
 
 ### Signed zero
 
@@ -204,7 +212,7 @@ echo "Exit code: $?"
 
 ## Validation
 
-Run the affected example and compare its output with its README. Shell success alone is insufficient: the Unicode example's Vite build fails intentionally, the array-spread script exits 1 for the runtime error, the surrogate-escape example's Vite build fails on AST JSON parsing, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
+Run the affected example and compare its output with its README. Shell success alone is insufficient: the hook-guard example builds but crashes during browser rendering, the Unicode example's Vite build fails intentionally, the array-spread script exits 1 for the runtime error, the surrogate-escape example's Vite build fails on AST JSON parsing, the signed-zero and project-rebuild scripts succeed when they detect their bugs, and the shutdown script prints the server's failure. Both standalone TypeScript compiler examples exit 2, but only the declaration-emit example should panic. In their README command blocks, the final `echo` reports the compiler's status while returning success itself.
 
 Record the revision, OS/architecture, tool versions, commands, and results in the task report or issue draft as appropriate; a README does not need a validation section. Distinguish source-archive builds from verified clone instructions; report only tested platforms and measured behavior.
 
