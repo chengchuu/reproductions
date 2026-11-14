@@ -42,15 +42,8 @@ export function App() {
 
 ### Steps To Reproduce
 
-```bash
-git clone https://github.com/chengchuu/reproductions.git
-cd reproductions/react/compiler-render-counters
-yarn install
-yarn setup
-yarn dev
-```
-
-Open the URL printed in the terminal and click **Update component: 0**.
+1. Follow the [reproduction setup instructions](https://github.com/chengchuu/reproductions/tree/main/react/compiler-render-counters#get-started) to start the app.
+2. Open the URL printed in the terminal and click **Update component: 0**.
 
 ### The current behavior
 
