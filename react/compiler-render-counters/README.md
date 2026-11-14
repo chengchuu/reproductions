@@ -1,6 +1,6 @@
 # React Compiler: render counter registration
 
-`react-compiler-runtime` loses a component's render counter registration after its first update, while the component remains mounted.
+`react-compiler-runtime` loses a component's render counter registration after its first update, even though the component is still mounted.
 
 ## Get started
 

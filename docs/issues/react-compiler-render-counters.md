@@ -24,7 +24,7 @@ https://github.com/chengchuu/reproductions/tree/main/react/compiler-render-count
 ````markdown
 `react-compiler-runtime` loses a component's render counter registration after its first update. The example calls `useRenderCounter` directly.
 
-This simplified example shows the trigger. The repository reproduction also displays the registry state.
+This simplified example shows the trigger. The repository reproduction also shows the registry state.
 
 ```jsx
 import { useState } from 'react';
@@ -47,7 +47,7 @@ export function App() {
 
 ### The current behavior
 
-The number of registered counters drops from `1` to `0` while the component remains mounted:
+The registered counter count drops from `1` to `0` while the component remains mounted:
 
 ```text
 Updates: 0; registered counters: 1
