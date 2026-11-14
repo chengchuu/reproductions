@@ -6,6 +6,7 @@ Each project has its own dependencies, setup instructions, and expected result. 
 
 | Project | What it reproduces |
 | --- | --- |
+| [React Compiler render counters](react/compiler-render-counters/) | Render counters disappear from the registry after the first component update. |
 | [React Compiler hook guards](react/compiler-hook-guards/) | Compiled components crash during rendering when hook guards access modern React internals. |
 | [React Compiler signed zero](react/compiler-signed-zero/) | The TypeScript compiler merges `0` and `-0` across branches, changing the result of `1 / value`. |
 | [React Compiler array-spread catch handler](react/compiler-array-spread-catch/) | The Rust compiler removes a catch handler around a throwing array spread. |
