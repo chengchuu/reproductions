@@ -1,4 +1,4 @@
-# [Compiler Bug]: Render counter registration is lost after the first update
+# [Compiler Bug]: Render counters unregister after the first update
 
 ---
 
