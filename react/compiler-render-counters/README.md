@@ -2,21 +2,7 @@
 
 `react-compiler-runtime` loses a component's render counter registration after its first update, even though the component is still mounted.
 
-This simplified example shows the trigger. The full reproduction also shows the registry state.
-
-```jsx
-import { useState } from 'react';
-import { useRenderCounter } from 'react-compiler-runtime';
-
-export function App() {
-  const [updates, setUpdates] = useState(0);
-  useRenderCounter('App');
-
-  return (
-    <button onClick={() => setUpdates(updates + 1)}>Update component: {updates}</button>
-  );
-}
-```
+The example in [src/App.jsx](./src/App.jsx) calls `useRenderCounter` directly and displays the registered counter count after each update.
 
 ## Get started
 
