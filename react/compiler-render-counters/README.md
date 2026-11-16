@@ -2,6 +2,8 @@
 
 `react-compiler-runtime` loses a component's render counter registration after its first update, even though the component is still mounted.
 
+The example in [src/App.jsx](./src/App.jsx) calls `useRenderCounter` directly and displays the registered counter count after each update.
+
 ## Get started
 
 ```bash
