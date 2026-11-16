@@ -93,5 +93,5 @@ Every time
 ## What version of React Compiler are you using?
 
 ```text
-react-compiler-runtime from react/react@df6aa4ec76cff5b3adde531c6fe8c36099e0469b
+react/react@df6aa4ec76cff5b3adde531c6fe8c36099e0469b
 ```
