@@ -68,7 +68,10 @@ Reproduced in Chrome on macOS.
 
 ### The expected behavior
 
-One counter should remain registered while the component is mounted.
+```text
+Updates: 0; registered counters: 1
+Updates: 1; registered counters: 1
+```
 ````
 
 ---

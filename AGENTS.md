@@ -193,6 +193,8 @@ echo "Exit code: $?"
 ## README and issue writing style
 
 - Keep each example concise, natural, and understandable in under 60 seconds. Use direct language and avoid repeating what the commands or output already show.
+- State details such as direct Hook calls once. Keep version and source-revision information without repeating behavior already explained in the introduction.
+- When expected behavior is clearest as output, use a labeled, language-tagged output block instead of a sentence restating it. Keep actual and expected output distinct and consistent between the README and issue draft. Expected output describes the intended result; do not imply it was observed unless verified.
 - Focus on reproducing the issue. Do not add fix comparisons or fix-validation instructions unless requested.
 - Prefer one clear reproduction workflow. When `yarn dev` demonstrates the bug, omit additional `yarn build` and `yarn preview` instructions unless production behavior is needed to reproduce or understand it. Keep additional validation results in the task report.
 - When the reproduction README has complete setup instructions, link directly to that section in the first numbered step of the issue draft. Include the action that triggers the bug, such as clicking a named button, in the next step. Verify the heading anchor and include any required commands that the README omits.
