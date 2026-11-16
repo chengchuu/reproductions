@@ -68,7 +68,10 @@ Reproduced in Chrome on macOS.
 
 ### The expected behavior
 
-One counter should remain registered while the component is mounted.
+```text
+Updates: 0; registered counters: 1
+Updates: 1; registered counters: 1
+```
 ````
 
 ---
@@ -90,5 +93,5 @@ Every time
 ## What version of React Compiler are you using?
 
 ```text
-react-compiler-runtime from react/react@df6aa4ec76cff5b3adde531c6fe8c36099e0469b
+react/react@df6aa4ec76cff5b3adde531c6fe8c36099e0469b
 ```

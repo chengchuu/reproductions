@@ -21,6 +21,11 @@ Updates: 0; registered counters: 1
 Updates: 1; registered counters: 0
 ```
 
-Expected: one counter remains registered after updates.
+Expected output:
 
-`yarn setup` builds the runtime from [React revision `df6aa4ec7`](https://github.com/react/react/tree/df6aa4ec76cff5b3adde531c6fe8c36099e0469b/compiler/packages/react-compiler-runtime). The example uses React 19.3.1 and calls `useRenderCounter` directly.
+```text
+Updates: 0; registered counters: 1
+Updates: 1; registered counters: 1
+```
+
+`yarn setup` builds the runtime from [React revision `df6aa4ec7`](https://github.com/react/react/tree/df6aa4ec76cff5b3adde531c6fe8c36099e0469b/compiler/packages/react-compiler-runtime).
