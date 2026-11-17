@@ -1,3 +1,6 @@
-# Issue documents
+# Documentation
 
-I maintain these issue documents manually. They are not automatically generated.
+These documents are maintained manually.
+
+- [Understanding $structuralCheck in React Compiler](react-compiler-structural-check.md)
+- [Issue drafts](issues/)
